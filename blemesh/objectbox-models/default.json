@@ -1,0 +1,282 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:16444136334749839",
+      "lastPropertyId": "5:8275122333162872768",
+      "name": "ModelDB",
+      "properties": [
+        {
+          "id": "1:1301920518958134531",
+          "name": "id"
+        },
+        {
+          "id": "2:5950800670900349273",
+          "name": "model_id"
+        },
+        {
+          "id": "3:4907813123461298155",
+          "indexId": "1:155027257750053019",
+          "name": "element_address"
+        },
+        {
+          "id": "4:8788173014349650800",
+          "name": "node_mac"
+        },
+        {
+          "id": "5:8275122333162872768",
+          "name": "app_key_index"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1565884466058877398",
+      "lastPropertyId": "3:6045442459473603159",
+      "name": "GroupDB",
+      "properties": [
+        {
+          "id": "1:872174656606651094",
+          "name": "id"
+        },
+        {
+          "id": "2:5770550378572111516",
+          "name": "name"
+        },
+        {
+          "id": "3:6045442459473603159",
+          "name": "netkey_index"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:5709291461361887600",
+      "lastPropertyId": "3:1663549816961624371",
+      "name": "AppNodeDB",
+      "properties": [
+        {
+          "id": "1:8967842360434541377",
+          "name": "id"
+        },
+        {
+          "id": "2:9110656054645983068",
+          "name": "app_key_index"
+        },
+        {
+          "id": "3:1663549816961624371",
+          "name": "node_mac"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:4483425517816637304",
+      "lastPropertyId": "3:3705579255937891389",
+      "name": "ElementDB",
+      "properties": [
+        {
+          "id": "1:56010450514491299",
+          "name": "id"
+        },
+        {
+          "id": "2:467450872941602970",
+          "indexId": "2:2488522852909612091",
+          "name": "node_mac"
+        },
+        {
+          "id": "3:3705579255937891389",
+          "name": "loc"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:1864390088550267037",
+      "lastPropertyId": "3:6689982252860323717",
+      "name": "AppDB",
+      "properties": [
+        {
+          "id": "1:4694918651996866799",
+          "name": "id"
+        },
+        {
+          "id": "2:4938471764243248613",
+          "indexId": "3:7544547286214163827",
+          "name": "key"
+        },
+        {
+          "id": "3:6689982252860323717",
+          "name": "unicast_addr"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:3111080493470046760",
+      "lastPropertyId": "13:4295106161831080736",
+      "name": "NodeDB",
+      "properties": [
+        {
+          "id": "1:906923565618006442",
+          "name": "id"
+        },
+        {
+          "id": "2:5607609031695884805",
+          "indexId": "4:4507342942432212919",
+          "name": "mac"
+        },
+        {
+          "id": "3:7697764038133259269",
+          "name": "uuid"
+        },
+        {
+          "id": "4:1194382858490271851",
+          "name": "key"
+        },
+        {
+          "id": "5:1568631413858807927",
+          "name": "name"
+        },
+        {
+          "id": "6:998133401571242169",
+          "name": "unicast_addr"
+        },
+        {
+          "id": "7:1080300240579466988",
+          "name": "element_count"
+        },
+        {
+          "id": "8:1825021940588926851",
+          "name": "netkey_index"
+        },
+        {
+          "id": "9:6545649971534249094",
+          "name": "cid"
+        },
+        {
+          "id": "10:6246274715117353556",
+          "name": "pid"
+        },
+        {
+          "id": "11:8062947714168814042",
+          "name": "vid"
+        },
+        {
+          "id": "12:885195792219467527",
+          "name": "crpl"
+        },
+        {
+          "id": "13:4295106161831080736",
+          "name": "features"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:3547518288969436603",
+      "lastPropertyId": "5:8871177379441554330",
+      "name": "GroupNodeDB",
+      "properties": [
+        {
+          "id": "1:8901317621537797171",
+          "name": "id"
+        },
+        {
+          "id": "2:9107868772952747650",
+          "name": "group_address"
+        },
+        {
+          "id": "3:5217972138714581661",
+          "name": "node_mac"
+        },
+        {
+          "id": "4:2516318144263716364",
+          "name": "element_address"
+        },
+        {
+          "id": "5:8871177379441554330",
+          "name": "model_id"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:7903798034408602736",
+      "lastPropertyId": "1:7188781705962571043",
+      "name": "AddressDB",
+      "properties": [
+        {
+          "id": "1:7188781705962571043",
+          "name": "id"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:8626578429412966373",
+      "lastPropertyId": "5:5493155612555148263",
+      "name": "NetworkDB",
+      "properties": [
+        {
+          "id": "1:5132177644339159331",
+          "name": "id"
+        },
+        {
+          "id": "2:5093001171185856190",
+          "name": "key"
+        },
+        {
+          "id": "3:8650609204454367491",
+          "name": "name"
+        },
+        {
+          "id": "4:5718808049229855277",
+          "name": "iv_index"
+        },
+        {
+          "id": "5:5493155612555148263",
+          "name": "seq"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:7548244593549833659",
+      "lastPropertyId": "4:7136323258114120562",
+      "name": "FastGroupDB",
+      "properties": [
+        {
+          "id": "1:4607944272988452110",
+          "name": "id"
+        },
+        {
+          "id": "2:4220962442625692771",
+          "name": "name"
+        },
+        {
+          "id": "3:8105937336370524875",
+          "name": "nodes"
+        },
+        {
+          "id": "4:7136323258114120562",
+          "name": "addr"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "10:7548244593549833659",
+  "lastIndexId": "4:4507342942432212919",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

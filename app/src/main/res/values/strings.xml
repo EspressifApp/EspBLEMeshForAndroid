@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name">EspBLEMesh</string>
+
+    <string name="main_title">EspBLEMesh</string>
+    <string name="main_menu_provision_scan">Provisioining</string>
+    <string name="main_menu_new_network">New Network</string>
+    <string name="main_menu_settings">Settings</string>
+    <string name="main_bt_disable_toast">Bluetooth is disable</string>
+    <string name="main_new_network_key_title">Network Key</string>
+    <string name="main_new_network_key_format_error">Key format error</string>
+    <string name="main_new_network_key_length_error">Key length must be 32</string>
+    <string name="main_new_network_key_duplicate_error">The key exists</string>
+    <string name="main_new_network_name_title">Network Name</string>
+    <string name="main_network_menu_delete">Delete Network</string>
+    <string name="main_delete_network_dialog_message">Do you want delete the Network?</string>
+
+    <string name="configure_connect">Connect</string>
+
+    <string name="provision_scan_title">Scan Provision</string>
+    <string name="provision_scan_menu_filter">Filter</string>
+    <string name="provision_scan_filter_rssi_negative">-</string>
+    <string name="provision_scan_filter_rssi_min">RSSI ≥</string>
+    <string name="provision_scan_filter_rssi_max">RSSI ≤</string>
+    <string name="provision_scan_filter_name">Name</string>
+    <string name="provision_scan_filter_uuid">UUID</string>
+
+    <string name="provisioning_title">Provisioining</string>
+    <string name="provisioning_config_device_name">Device name</string>
+    <string name="provisioning_config_network">Network</string>
+    <string name="provisioning_config_fast_prov_check">Fast provisioning</string>
+    <string name="provisioning_config_fast_prov_count">Expect fast provisioning count</string>
+    <string name="provisioning_bluetooth_hint">An error occurred，please reboot Bluetooth and try again</string>
+
+    <string name="network_group_all">All</string>
+    <string name="network_menu_disconnect_ble">Disconnect BLE</string>
+    <string name="network_menu_group_add">New Group</string>
+    <string name="network_menu_group_delete">Delete Group</string>
+    <string name="network_menu_fast_proved">Fast Provisioned</string>
+    <string name="network_group_item_conncet">Connect</string>
+    <string name="network_group_item_configuration">Config</string>
+    <string name="network_group_switch_onoff">On/Off</string>
+    <string name="network_group_popup_menu_delete">Delete</string>
+    <string name="network_group_popup_menu_fast_prov">Fast Provisioning</string>
+    <string name="network_group_popup_menu_ota">OTA</string>
+    <string name="network_group_delete_all_message">Current group can\'t delete</string>
+    <string name="network_group_delete_dialog_message">Do you want delete Group %s?</string>
+
+    <string name="node_composition_data_get">Composition Data Get</string>
+    <string name="node_relay_count">Relay count</string>
+    <string name="node_relay_step">Relay step</string>
+    <string name="node_relay_set">Relay set</string>
+    <string name="node_bind_app_key">Bind App Key</string>
+    <string name="node_model_bind_group">Bind group</string>
+    <string name="node_model_bind_group_no_message">No group can be bound</string>
+    <string name="node_model_unbind_group">Unbind</string>
+    <string name="node_cid_label">cid:</string>
+    <string name="node_pid_label">pid:</string>
+    <string name="node_vid_label">vid:</string>
+    <string name="node_crpl_label">crpl:</string>
+    <string name="node_features_label">features:</string>
+    <string name="node_connect">Connect</string>
+    <string name="node_configuration">Configuration</string>
+    <string name="node_configuration_onoff">On/Off</string>
+    <string name="node_control_group">Group</string>
+
+    <string name="group_new_group_title">New Group</string>
+    <string name="group_name_hint">Enter group name</string>
+    <string name="group_name_error">Group name can\'t be empty.</string>
+
+    <string name="fast_provisioned_title">Fast provisioned</string>
+    <string name="fast_provisioned_delete_all_title">Delete All</string>
+    <string name="fast_provisioned_delete_all_message">Do you want to delete all fast provision nodes?</string>
+    <string name="fast_provsioned_get">Get</string>
+    <string name="fast_provsioned_group_all">All</string>
+    <string name="fast_provsioned_group_menu_add_group">Add Group</string>
+    <string name="fast_provsioned_group_menu_edit_node">Edit Nodes</string>
+    <string name="fast_provsioned_group_menu_delete_group">Delete</string>
+    <string name="fast_provsioned_group_move">Move</string>
+    <string name="fast_provsioned_group_remove">Remove</string>
+    <string name="fast_provsioned_group_remove_all_toast">Default group can\'t remove nodes</string>
+    <string name="fast_provsioned_group_move_dialog_title">Move nodes into</string>
+    <string name="fast_provsioned_group_remove_dialog_title">Remove nodes</string>
+    <string name="fast_provsioned_group_remove_dialog_message">Remove all selected nodes?</string>
+    <string name="fast_provisioned_no_connection">No BLE connection now</string>
+
+    <string name="fast_group_new_group_title">New Fast Group</string>
+    <string name="fast_group_name_hint">Enter group name</string>
+    <string name="fast_group_name_error">Group name can\'t be empty.</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_version_category_title">Version</string>
+    <string name="settings_version_title">Version</string>
+    <string name="settings_app_category_title">Mesh App</string>
+    <string name="settings_app_new_title">New App Key</string>
+    <string name="settings_app_delete_title">Delete App Key</string>
+    <string name="settings_app_used_title">Current Used App Key</string>
+    <string name="settings_new_app_key_format_error">Key format error</string>
+    <string name="settings_new_app_key_length_error">Key length must be 32</string>
+    <string name="settings_new_app_key_duplicate_error">The key exists</string>
+    <string name="settings_message_category_title">Message</string>
+    <string name="settings_message_post_count">Post Count</string>
+    <string name="settings_message_backpressure">Control Delay</string>
+
+    <string name="node_ota_title">OTA</string>
+    <string name="node_ota_bin_ssid">SoftAP SSID</string>
+    <string name="node_ota_bin_password">SoftAP Password</string>
+    <string name="node_ota_bin_select">Select bin</string>
+    <string name="node_ota_bin_dialog">Select this bin to OTA?</string>
+    <string name="node_ota_bin_digits">1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
+    <string name="node_ota_ssid_length_error">Please input 2 chars</string>
+    <string name="node_ota_passowrd_length_error">Please input 2 chars</string>
+    <string name="node_ota_softap_connect_continue">Continue</string>
+    <string name="node_ota_softap_connect_message">Connect SoftAP failed, try connecting in System Wifi Settings.\n SSID: %1$s\nPassword: %2$s</string>
+</resources>

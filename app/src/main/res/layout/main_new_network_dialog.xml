@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_new_network_key_title"
+        android:textColor="@color/colorAccent" />
+
+    <EditText
+        android:id="@+id/network_key_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="@integer/key_length" />
+
+    <TextView
+        android:id="@+id/network_key_hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/main_new_network_name_title"
+        android:textColor="@color/colorAccent" />
+
+    <EditText
+        android:id="@+id/network_name_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

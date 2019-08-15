@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EspBLEMesh</string>
+
+    <string name="main_title">EspBLEMesh</string>
+    <string name="main_menu_provision_scan">配网</string>
+    <string name="main_menu_new_network">新建网络</string>
+    <string name="main_menu_settings">设置</string>
+    <string name="main_bt_disable_toast">蓝牙不可用</string>
+    <string name="main_new_network_key_title">网络 Key</string>
+    <string name="main_new_network_key_format_error">Key 格式错误r</string>
+    <string name="main_new_network_key_length_error">Key 的长度必须为 32</string>
+    <string name="main_new_network_key_duplicate_error">此 key 已存在</string>
+    <string name="main_new_network_name_title">网络名</string>
+    <string name="main_network_menu_delete">删除网络</string>
+    <string name="main_delete_network_dialog_message">确定删除该网络?</string>
+
+    <string name="configure_connect">连接</string>
+
+    <string name="provision_scan_title">扫描设备</string>
+    <string name="provision_scan_menu_filter">过滤</string>
+    <string name="provision_scan_filter_rssi_negative">-</string>
+    <string name="provision_scan_filter_rssi_min">RSSI ≥</string>
+    <string name="provision_scan_filter_rssi_max">RSSI ≤</string>
+    <string name="provision_scan_filter_name">设备名</string>
+    <string name="provision_scan_filter_uuid">UUID</string>
+
+    <string name="provisioning_title">配网</string>
+    <string name="provisioning_config_device_name">节点名字</string>
+    <string name="provisioning_config_network">网络</string>
+    <string name="provisioning_config_fast_prov_check">快速配网</string>
+    <string name="provisioning_config_fast_prov_count">需要快速配网节点个数</string>
+    <string name="provisioning_bluetooth_hint">发生错误，请重启蓝牙后再试一次</string>
+
+    <string name="network_group_all">全部</string>
+    <string name="network_menu_disconnect_ble">断开 BLE</string>
+    <string name="network_menu_group_add">新建分组</string>
+    <string name="network_menu_group_delete">删除分组</string>
+    <string name="network_menu_fast_proved">快速配网的设备</string>
+    <string name="network_group_item_conncet">连接</string>
+    <string name="network_group_item_configuration">配置</string>
+    <string name="network_group_switch_onoff">开/关</string>
+    <string name="network_group_popup_menu_delete">删除</string>
+    <string name="network_group_popup_menu_fast_prov">快速配网</string>
+    <string name="network_group_popup_menu_ota">OTA</string>
+    <string name="network_group_delete_all_message">不能删除当前分组</string>
+    <string name="network_group_delete_dialog_message">是否删除分组 %s?</string>
+
+    <string name="node_composition_data_get">Composition Data Get</string>
+    <string name="node_relay_count">Relay count</string>
+    <string name="node_relay_step">Relay step</string>
+    <string name="node_relay_set">Relay set</string>
+    <string name="node_bind_app_key">Bind App Key</string>
+    <string name="node_model_bind_group">Bind group</string>
+    <string name="node_model_bind_group_no_message">No group can be bound</string>
+    <string name="node_model_unbind_group">Unbind</string>
+    <string name="node_cid_label">cid:</string>
+    <string name="node_pid_label">pid:</string>
+    <string name="node_vid_label">vid:</string>
+    <string name="node_crpl_label">crpl:</string>
+    <string name="node_features_label">features:</string>
+    <string name="node_connect">Connect</string>
+    <string name="node_configuration">Configuration</string>
+    <string name="node_configuration_onoff">On/Off</string>
+    <string name="node_control_group">Group</string>
+
+    <string name="group_new_group_title">新建分组</string>
+    <string name="group_name_hint">输入组名</string>
+    <string name="group_name_error">组名不可以为空</string>
+
+    <string name="fast_provisioned_title">快速配网的设备</string>
+    <string name="fast_provisioned_delete_all_title">删除全部</string>
+    <string name="fast_provisioned_delete_all_message">确定删除所有快速配网的设备?</string>
+    <string name="fast_provsioned_get">获取</string>
+    <string name="fast_provsioned_group_all">全部</string>
+    <string name="fast_provsioned_group_menu_add_group">增加分组</string>
+    <string name="fast_provsioned_group_menu_edit_node">编辑节点</string>
+    <string name="fast_provsioned_group_menu_delete_group">删除</string>
+    <string name="fast_provsioned_group_move">移入</string>
+    <string name="fast_provsioned_group_remove">移除</string>
+    <string name="fast_provsioned_group_remove_all_toast">不能移除默认分组内的节点</string>
+    <string name="fast_provsioned_group_move_dialog_title">将节点移入</string>
+    <string name="fast_provsioned_group_remove_dialog_title">移除节点</string>
+    <string name="fast_provsioned_group_remove_dialog_message">移除所有选择的节点?</string>
+    <string name="fast_provisioned_no_connection">没有连接任何节点</string>
+
+    <string name="fast_group_new_group_title">新建分组</string>
+    <string name="fast_group_name_hint">输入组名</string>
+    <string name="fast_group_name_error">组名不可以为空</string>
+
+    <string name="settings_title">设置</string>
+    <string name="settings_version_category_title">版本</string>
+    <string name="settings_version_title">版本</string>
+    <string name="settings_app_category_title">Mesh App</string>
+    <string name="settings_app_new_title">新建 App Key</string>
+    <string name="settings_app_delete_title">删除 App Key</string>
+    <string name="settings_app_used_title">当前使用的 App Key</string>
+    <string name="settings_new_app_key_format_error">Key 格式错误</string>
+    <string name="settings_new_app_key_length_error">Key 长度必须为32</string>
+    <string name="settings_new_app_key_duplicate_error">此 key 已存在</string>
+    <string name="settings_message_category_title">消息</string>
+    <string name="settings_message_post_count">发送次数</string>
+    <string name="settings_message_backpressure">Control Delay</string>
+
+    <string name="node_ota_title">OTA</string>
+    <string name="node_ota_bin_ssid">SoftAP SSID</string>
+    <string name="node_ota_bin_password">SoftAP 密码</string>
+    <string name="node_ota_bin_select">选择 bin</string>
+    <string name="node_ota_bin_dialog">使用选择的 bin 进行 OTA?</string>
+    <string name="node_ota_bin_digits">1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
+    <string name="node_ota_ssid_length_error">输入两个字符s</string>
+    <string name="node_ota_passowrd_length_error">输入两个字符</string>
+    <string name="node_ota_softap_connect_continue">继续</string>
+    <string name="node_ota_softap_connect_message">连接 SoftAP 失败, 请尝试在系统设置中连接.\n SSID: %1$s\密码: %2$s</string>
+</resources>

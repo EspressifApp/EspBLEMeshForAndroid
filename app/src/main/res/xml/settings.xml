@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_version_category_title">
+        <Preference
+            android:key="settings_version_key"
+            android:title="@string/settings_version_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_app_category_title">
+        <EditTextPreference
+            android:key="settings_app_new_key"
+            android:maxLength="@integer/key_length"
+            android:title="@string/settings_app_new_title" />
+
+        <MultiSelectListPreference
+            android:key="settings_app_delete_key"
+            android:title="@string/settings_app_delete_title" />
+
+        <ListPreference
+            android:key="settings_app_used_key"
+            android:title="@string/settings_app_used_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_message_category_title">
+        <EditTextPreference
+            android:inputType="number"
+            android:key="settings_message_post_count_key"
+            android:title="@string/settings_message_post_count" />
+        <EditTextPreference
+            android:inputType="number"
+            android:key="settings_message_backpressure_key"
+            android:title="@string/settings_message_backpressure" />
+    </PreferenceCategory>
+</PreferenceScreen>

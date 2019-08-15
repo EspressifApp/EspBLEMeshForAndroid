@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <FrameLayout
+        android:layout_width="104dp"
+        android:layout_height="44dp"
+        android:background="@android:color/black"
+        android:padding="2dp">
+
+        <SurfaceView
+            android:id="@+id/color_display"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="@android:color/white" />
+    </FrameLayout>
+
+
+    <libs.espressif.widget.CircleColorPicker
+        android:id="@+id/color_picker1"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_marginTop="16dp" />
+
+    <libs.espressif.widget.LinearColorPicker
+        android:id="@+id/color_picker2"
+        android:layout_width="240dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

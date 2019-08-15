@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
+
+    <LinearLayout
+        android:id="@+id/node_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/node_composition_data_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/node_composition_data_get" />
+
+        <LinearLayout
+            android:id="@+id/relay_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/relay_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/node_relay_count"
+                android:inputType="number"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/relay_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/node_relay_step"
+                android:inputType="number"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/relay_set_btn"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:text="@string/node_relay_set" />
+        </LinearLayout>
+
+        <SurfaceView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@color/colorPrimaryDark"
+            android:visibility="gone" />
+
+        <include layout="@layout/node_composition_data_form" />
+
+    </LinearLayout>
+</FrameLayout>
