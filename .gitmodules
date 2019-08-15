@@ -1,3 +1,0 @@
-[submodule "apptools"]
-	path = apptools
-	url = https://gitlab.espressif.cn:6688/xxj/apptools.git
