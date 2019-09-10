@@ -29,6 +29,7 @@ import com.espressif.espblemesh.app.BaseActivity;
 import com.espressif.espblemesh.constants.Constants;
 import com.espressif.espblemesh.eventbus.blemesh.CompositionDataEvent;
 import com.espressif.espblemesh.eventbus.GattConnectionEvent;
+import com.espressif.espblemesh.eventbus.blemesh.LightCTLEvent;
 import com.espressif.espblemesh.eventbus.blemesh.LightHSLEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelAppEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelSubscriptionEvent;
@@ -83,6 +84,7 @@ public class NodeConfActivity extends BaseActivity {
     private ElementModelAdapter mElementModelAdapter;
 
     private View mHSLColorDisplay;
+    private Button mCTLOKBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -264,6 +266,41 @@ public class NodeConfActivity extends BaseActivity {
         mMeshConnection.getLightHSL(mNode, dstAddr);
     }
 
+    private void showCTLDialog(long dstAddr) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(R.layout.node_conf_ctl_dialog)
+                .setOnDismissListener(d -> mCTLOKBtn = null)
+                .setCancelable(false)
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+        EditText lightnessET = dialog.findViewById(R.id.lightness_edit);
+        EditText temperatureET = dialog.findViewById(R.id.temperature_edit);
+        EditText deltaUVET = dialog.findViewById(R.id.delta_uv_edit);
+        Button okBtn = dialog.findViewById(R.id.ok_btn);
+        assert lightnessET != null && temperatureET != null && deltaUVET != null && okBtn != null;
+        mCTLOKBtn = okBtn;
+        okBtn.setOnClickListener(v -> {
+            String lightnessStr = lightnessET.getText().toString();
+            if (TextUtils.isEmpty(lightnessStr)) {
+                return;
+            }
+            String temperatureStr = temperatureET.getText().toString();
+            if (TextUtils.isEmpty(temperatureStr)) {
+                return;
+            }
+            String deltaUVStr = deltaUVET.getText().toString();
+            if (TextUtils.isEmpty(deltaUVStr)) {
+                return;
+            }
+
+            v.setEnabled(false);
+            int lightness = Integer.parseInt(lightnessStr);
+            int temperature = Integer.parseInt(temperatureStr);
+            int deltaUV = Integer.parseInt(deltaUVStr);
+            mMeshConnection.setLightCTL(lightness, temperature, deltaUV, mNode, dstAddr);
+        });
+    }
+
     private class ElementNodeHolder extends RecyclerView.ViewHolder {
         Model model;
 
@@ -296,7 +333,16 @@ public class NodeConfActivity extends BaseActivity {
                 mMeshConnection.onOff(isChecked, mNode, model.getElementAddress());
             });
             image1 = itemView.findViewById(R.id.image1);
-            image1.setOnClickListener(v -> showHSLDialog(model.getElementAddress()));
+            image1.setOnClickListener(v -> {
+                switch(model.getId()) {
+                    case MeshConstants.MODEL_ID_HSL:
+                        showHSLDialog(model.getElementAddress());
+                        break;
+                    case MeshConstants.MODEL_ID_CTL:
+                        showCTLDialog(model.getElementAddress());
+                        break;
+                }
+            });
             bindAppBtn = itemView.findViewById(R.id.button1);
             bindAppBtn.setOnClickListener(v -> {
                 if (!mNode.containsAppKeyIndex(mMeshConnection.getApp().getKeyIndex())) {
@@ -447,10 +493,18 @@ public class NodeConfActivity extends BaseActivity {
                     }
                     break;
                 }
+                case MeshConstants.MODEL_ID_CTL: {
+                    holder.modelText1.append(" CTL");
+                    if (model.hasAppKey()) {
+                        holder.image1.setImageResource(R.drawable.ic_edit_24dp);
+                        holder.image1.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                }
                 case MeshConstants.MODEL_ID_HSL: {
                     holder.modelText1.append(" HSL");
                     if (model.hasAppKey()) {
-                        // TODO
+                        holder.image1.setImageResource(R.drawable.ic_color_lens_24dp);
                         holder.image1.setVisibility(View.VISIBLE);
                     }
                     break;
@@ -528,6 +582,14 @@ public class NodeConfActivity extends BaseActivity {
         if (mHSLColorDisplay != null) {
             int color = Color.rgb(event.getRed(), event.getGreen(), event.getBlue());
             mHSLColorDisplay.setBackgroundColor(color);
+        }
+    }
+
+    @Subscribe
+    public void onLightCTLEvent(LightCTLEvent event) {
+        // Get CTL status
+        if (mCTLOKBtn != null) {
+            mCTLOKBtn.setEnabled(true);
         }
     }
 }

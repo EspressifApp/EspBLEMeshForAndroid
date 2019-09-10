@@ -20,6 +20,8 @@ import com.espressif.blemesh.model.message.custom.FastProvNodeAddrGetMessage;
 import com.espressif.blemesh.model.message.standard.AppKeyAddMessage;
 import com.espressif.blemesh.model.message.standard.CompositionDataGetMessage;
 import com.espressif.blemesh.model.message.standard.GenericOnOffMessage;
+import com.espressif.blemesh.model.message.standard.LightCTLGetMessage;
+import com.espressif.blemesh.model.message.standard.LightCTLSetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLGetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLSetMessage;
 import com.espressif.blemesh.model.message.standard.ModelAppBindMessage;
@@ -32,6 +34,7 @@ import com.espressif.espblemesh.eventbus.GattConnectionEvent;
 import com.espressif.espblemesh.eventbus.GattNodeServiceEvent;
 import com.espressif.espblemesh.eventbus.blemesh.CompositionDataEvent;
 import com.espressif.espblemesh.eventbus.blemesh.FastProvAddrEvent;
+import com.espressif.espblemesh.eventbus.blemesh.LightCTLEvent;
 import com.espressif.espblemesh.eventbus.blemesh.LightHSLEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelAppEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelSubscriptionEvent;
@@ -245,6 +248,20 @@ public enum MeshConnection {
         }
     }
 
+    public void setLightCTL(int lightness, int temperature, int deltaUV, Node node, long addr) {
+        if (mMessager != null) {
+            LightCTLSetMessage message = new LightCTLSetMessage(addr, node, mApp, lightness, temperature, deltaUV);
+            mMessager.lightSetCTL(message);
+        }
+    }
+
+    public void getLightCTL(Node node, long addr) {
+        if (mMessager != null) {
+            LightCTLGetMessage message = new LightCTLGetMessage(addr, node, mApp);
+            mMessager.lightGetCTL(message);
+        }
+    }
+
     public void compositionDataGet(Node node, int page) {
         if (mMessager != null) {
             CompositionDataGetMessage message = new CompositionDataGetMessage(node, page);
@@ -285,6 +302,12 @@ public enum MeshConnection {
         @Override
         public void onLightHSLStatus(int[] rgb) {
             LightHSLEvent event = new LightHSLEvent(rgb[0], rgb[1], rgb[2]);
+            EventBus.getDefault().post(event);
+        }
+
+        @Override
+        public void onLightCTLStatus(int lightness, int temperature, int deltaUV) {
+            LightCTLEvent event = new LightCTLEvent(lightness, temperature, deltaUV);
             EventBus.getDefault().post(event);
         }
 

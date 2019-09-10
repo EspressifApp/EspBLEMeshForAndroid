@@ -10,6 +10,8 @@ import com.espressif.blemesh.model.message.custom.FastProvNodeAddrGetMessage;
 import com.espressif.blemesh.model.message.standard.AppKeyAddMessage;
 import com.espressif.blemesh.model.message.standard.CompositionDataGetMessage;
 import com.espressif.blemesh.model.message.standard.GenericOnOffMessage;
+import com.espressif.blemesh.model.message.standard.LightCTLGetMessage;
+import com.espressif.blemesh.model.message.standard.LightCTLSetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLGetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLSetMessage;
 import com.espressif.blemesh.model.message.standard.ModelAppBindMessage;
@@ -53,6 +55,10 @@ public interface IMeshMessager {
     void lightSetHSL(LightHSLSetMessage message);
 
     void lightGetHSL(LightHSLGetMessage message);
+
+    void lightSetCTL(LightCTLSetMessage message);
+
+    void lightGetCTL(LightCTLGetMessage message);
 
     void fastProvInfoSet(FastProvInfoSetMessage message);
 

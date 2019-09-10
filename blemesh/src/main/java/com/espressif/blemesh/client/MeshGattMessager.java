@@ -10,6 +10,8 @@ import com.espressif.blemesh.model.message.custom.FastGroupBindMessage;
 import com.espressif.blemesh.model.message.custom.FastGroupUnbindMessage;
 import com.espressif.blemesh.model.message.custom.OtaNBVNMessage;
 import com.espressif.blemesh.model.message.custom.OtaStartMessage;
+import com.espressif.blemesh.model.message.standard.LightCTLGetMessage;
+import com.espressif.blemesh.model.message.standard.LightCTLSetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLGetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLSetMessage;
 import com.espressif.blemesh.model.message.standard.proxyconfiguration.AddAddressesToFilterMessage;
@@ -517,6 +519,11 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
                     case 0x04: {
                         // Generic OnOff Status
                         parseGenericOnOffStatus(payload);
+                        break;
+                    }
+                    case 0x60: {
+                        // Light CTL status
+                        parseLightCTLStatus(payload);
                         break;
                     }
                     case 0x78: {
@@ -1046,6 +1053,26 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
 
         if (mMessageCallback != null) {
             mMessageCallback.onLightHSLStatus(rgb);
+        }
+    }
+
+    @Override
+    public void lightSetCTL(LightCTLSetMessage message) {
+        postMessage(message);
+    }
+
+    @Override
+    public void lightGetCTL(LightCTLGetMessage message) {
+        postMessage(message);
+    }
+
+    private void parseLightCTLStatus(byte[] payload) {
+        int lightness = (payload[2] & 0xff) | ((payload[3] & 0xff) << 8);
+        int temperature = (payload[4] & 0xff) | ((payload[5] & 0xff) << 8);
+        int deltaUV = (payload[6] & 0xff) | ((payload[7] & 0xff) << 8);
+
+        if (mMessageCallback != null) {
+            mMessageCallback.onLightCTLStatus(lightness, temperature, deltaUV);
         }
     }
 

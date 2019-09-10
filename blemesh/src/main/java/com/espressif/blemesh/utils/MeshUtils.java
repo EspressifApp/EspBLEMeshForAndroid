@@ -279,7 +279,7 @@ public class MeshUtils {
     public static float[] lightHSLtoHSL(int[] lightHSL) {
         float h = 360f * ((float) lightHSL[0]) / 65535f;
         float s = ((float) lightHSL[1]) / 65535f;
-        float l = (float) (Math.pow(((double) lightHSL[2]) / 65535.0, 2.0) * 65535.0);
+        float l = (float) (Math.pow(lightHSL[2], 2) / 65535.0);
         return new float[]{h, s, l};
     }
 

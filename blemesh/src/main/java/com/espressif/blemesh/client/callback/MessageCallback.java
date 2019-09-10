@@ -18,7 +18,10 @@ public abstract class MessageCallback {
     public void onRelayStatus(int state, int count, int step) {
     }
 
-    public void onLightHSLStatus(int[] rgb){
+    public void onLightHSLStatus(int[] rgb) {
+    }
+
+    public void onLightCTLStatus(int lightness, int temperature, int deltaUV) {
     }
 
     public void onFastProvStatus() {

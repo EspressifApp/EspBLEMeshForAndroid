@@ -47,8 +47,7 @@
                     android:id="@+id/image1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_color_lens_24dp" />
+                    android:scaleType="centerInside" />
 
                 <Switch
                     android:id="@+id/switch1"

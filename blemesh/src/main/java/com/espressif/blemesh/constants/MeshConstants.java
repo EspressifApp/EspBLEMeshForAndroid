@@ -80,5 +80,6 @@ public class MeshConstants {
     public static final String NET_NAME_DEFAULT = "Default Network";
 
     public static final String MODEL_ID_ONOFF = "1000";
+    public static final String MODEL_ID_CTL = "1303";
     public static final String MODEL_ID_HSL = "1307";
 }
