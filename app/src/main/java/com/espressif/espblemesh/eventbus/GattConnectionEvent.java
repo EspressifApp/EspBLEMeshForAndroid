@@ -24,4 +24,8 @@ public class GattConnectionEvent {
     public int getStatus() {
         return mStatus;
     }
+
+    public boolean isConnected() {
+        return mStatus == BluetoothGatt.GATT_SUCCESS && mState == BluetoothGatt.STATE_CONNECTED;
+    }
 }

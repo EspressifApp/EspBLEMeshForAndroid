@@ -5,21 +5,24 @@ import android.annotation.SuppressLint;
 import com.espressif.blemesh.client.abs.MeshCommunicationClient;
 import com.espressif.blemesh.client.callback.MessageCallback;
 import com.espressif.blemesh.db.box.MeshObjectBox;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.model.message.custom.FastGroupBindMessage;
 import com.espressif.blemesh.model.message.custom.FastGroupUnbindMessage;
 import com.espressif.blemesh.model.message.custom.OtaNBVNMessage;
 import com.espressif.blemesh.model.message.custom.OtaStartMessage;
+import com.espressif.blemesh.model.message.standard.GenericLevelGetMessage;
+import com.espressif.blemesh.model.message.standard.GenericLevelSetMessage;
 import com.espressif.blemesh.model.message.standard.LightCTLGetMessage;
 import com.espressif.blemesh.model.message.standard.LightCTLSetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLGetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLSetMessage;
+import com.espressif.blemesh.model.message.standard.NodeResetMessage;
 import com.espressif.blemesh.model.message.standard.proxyconfiguration.AddAddressesToFilterMessage;
 import com.espressif.blemesh.model.message.standard.AppKeyAddMessage;
 import com.espressif.blemesh.model.message.standard.CompositionDataGetMessage;
 import com.espressif.blemesh.model.message.custom.FastProvInfoSetMessage;
 import com.espressif.blemesh.model.message.custom.FastProvNodeAddrGetMessage;
-import com.espressif.blemesh.model.message.standard.GenericOnOffMessage;
+import com.espressif.blemesh.model.message.standard.GenericOnOffSetMessage;
 import com.espressif.blemesh.model.message.standard.ModelAppBindMessage;
 import com.espressif.blemesh.model.message.standard.ModelSubscriptionAddMessage;
 import com.espressif.blemesh.model.message.standard.ModelSubscriptionDeleteMessage;
@@ -33,6 +36,7 @@ import com.espressif.blemesh.model.Element;
 import com.espressif.blemesh.model.Model;
 import com.espressif.blemesh.model.Network;
 import com.espressif.blemesh.model.Node;
+import com.espressif.blemesh.task.NodeDeleteTask;
 import com.espressif.blemesh.utils.MeshAlgorithmUtils;
 import com.espressif.blemesh.utils.MeshUtils;
 
@@ -510,6 +514,11 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
                         parseModelAppStatus(deviceAddr, payload);
                         break;
                     }
+                    case 0x4a: {
+                        // Node Reset Status
+                        parseNodeResetStatus(deviceAddr, payload);
+                        break;
+                    }
                 } // end switch opcode index 1
 
                 break;
@@ -519,6 +528,10 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
                     case 0x04: {
                         // Generic OnOff Status
                         parseGenericOnOffStatus(payload);
+                        break;
+                    }
+                    case 0x08: {
+                        parseGenericLevelStatus(payload);
                         break;
                     }
                     case 0x60: {
@@ -665,7 +678,7 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
     }
 
     private void postNetworkPDU(byte[] opcode, byte[] parameters, int ctl, int ttl, long dstAddr,
-                                Node node, App app, Message.SecurityKey securityKey, int proxyType) {
+                                Node node, App app, MeshMessage.SecurityKey securityKey, int proxyType) {
         if (app != null) {
             mAppMap.put(app.getAid(), app);
         }
@@ -685,7 +698,7 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
         int nonceType;
         byte[] key;
         int aid;
-        if (securityKey == Message.SecurityKey.DeviceKey) {
+        if (securityKey == MeshMessage.SecurityKey.DeviceKey) {
             nonceType = NONCE_TYPE_DEVICE;
         } else {
             nonceType = NONCE_TYPE_APP;
@@ -739,7 +752,7 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
     }
 
     private void postProxyPDU(byte[] opcode, byte[] parameters, int ctl, int ttl, long dstAddr,
-                              Node node, App app, Message.SecurityKey securityKey, int proxyType) {
+                              Node node, App app, MeshMessage.SecurityKey securityKey, int proxyType) {
         if (app != null) {
             mAppMap.put(app.getAid(), app);
         }
@@ -756,7 +769,7 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
     }
 
     private void __postMessage(byte[] opcode, byte[] parameters, int ctl, int ttl, long dstAddr,
-                               Node node, App app, Message.SecurityKey securityKey, int proxyType) {
+                               Node node, App app, MeshMessage.SecurityKey securityKey, int proxyType) {
         switch (proxyType) {
             case MeshConstants.PROXY_TYPE_PROXY_CONGURATION: {
                 postProxyPDU(opcode, parameters, ctl, ttl, dstAddr, node, app, securityKey, proxyType);
@@ -769,7 +782,7 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
     }
 
     @Override
-    public void postMessage(Message message) {
+    public void postMessage(MeshMessage message) {
         mLog.d("postMessage " + message.getClass().getSimpleName());
         int postCount = message.getPostCount();
         for (int i = 0; i < postCount; i++) {
@@ -1009,6 +1022,23 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
     }
 
     @Override
+    public void nodeReset(NodeResetMessage message) {
+        postMessage(message);
+    }
+
+    private void parseNodeResetStatus(byte[] deviceAddr, byte[] payload) {
+        Node node = mNodeMap.get(MeshUtils.bigEndianBytesToLong(deviceAddr));
+        if (node == null) {
+            return;
+        }
+
+        new NodeDeleteTask(node.getMac()).run();
+        if (mMessageCallback != null) {
+            mMessageCallback.onNodeResetStatus(node.getUnicastAddress(), node.getMac());
+        }
+    }
+
+    @Override
     public void relaySet(RelaySetMessage message) {
         postMessage(message);
     }
@@ -1026,12 +1056,32 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
     }
 
     @Override
-    public void genericOnOff(GenericOnOffMessage message) {
+    public void genericOnOffSet(GenericOnOffSetMessage message) {
         postMessage(message);
     }
 
     private void parseGenericOnOffStatus(byte[] payload) {
         int state = payload[2] & 0xff;
+        if (mMessageCallback != null) {
+            mMessageCallback.onGenericOnOffStatus(state != 0);
+        }
+    }
+
+    @Override
+    public void genericLevelGet(GenericLevelGetMessage message) {
+        postMessage(message);
+    }
+
+    @Override
+    public void genericLevelSet(GenericLevelSetMessage message) {
+        postMessage(message);
+    }
+
+    private void parseGenericLevelStatus(byte[] payload) {
+        int level = (payload[2] & 0xff) | ((payload[3] & 0xff) << 8);
+        if (mMessageCallback != null) {
+            mMessageCallback.onGenericLevelStatus(level);
+        }
     }
 
     @Override
@@ -1049,10 +1099,10 @@ public class MeshGattMessager extends MeshCommunicationClient implements IMeshMe
         int h = (payload[4] & 0xff) | ((payload[5] & 0xff) << 8);
         int s = (payload[6] & 0xff) | ((payload[7] & 0xff) << 8);
         int[] lightHSL = {h, s, l};
-        int[] rgb = MeshUtils.lightHSLtoRGB(lightHSL);
+        float[] hsl = MeshUtils.lightMeshHSLtoHSL(lightHSL);
 
         if (mMessageCallback != null) {
-            mMessageCallback.onLightHSLStatus(rgb);
+            mMessageCallback.onLightHSLStatus(hsl);
         }
     }
 

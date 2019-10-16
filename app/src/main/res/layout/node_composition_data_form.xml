@@ -6,128 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:showIn="@layout/node_conf_content">
+    tools:showIn="@layout/node_content">
 
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/node_info_form"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:columnCount="2"
-        app:rowCount="3">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/node_cid_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/node_cid_label"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/node_cid_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/node_cid_label" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/node_pid_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/node_pid_label"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/node_pid_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/node_pid_label" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/node_vid_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/node_vid_label"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/node_vid_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/node_vid_label" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/node_crpl_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/node_crpl_label"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/node_crpl_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/node_crpl_label" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1">
-
-            <TextView
-                android:id="@+id/node_features_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/node_features_label"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/node_features_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/node_features_label" />
-        </RelativeLayout>
-
-    </androidx.gridlayout.widget.GridLayout>
-
-    <SurfaceView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/colorPrimaryDark" />
+        android:text="@string/node_model_list"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@color/colorAccent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

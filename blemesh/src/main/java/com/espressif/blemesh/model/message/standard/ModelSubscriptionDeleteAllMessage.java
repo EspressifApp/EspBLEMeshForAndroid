@@ -3,12 +3,12 @@ package com.espressif.blemesh.model.message.standard;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.Model;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.utils.MeshUtils;
 
 import libs.espressif.utils.DataUtil;
 
-public class ModelSubscriptionDeleteAllMessage extends Message {
+public class ModelSubscriptionDeleteAllMessage extends MeshMessage {
     private  Model mModel;
 
     public ModelSubscriptionDeleteAllMessage(Node node, Model model) {

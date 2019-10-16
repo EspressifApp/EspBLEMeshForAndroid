@@ -3,14 +3,14 @@ package com.espressif.blemesh.model.message.custom;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.utils.MeshUtils;
 
 import java.util.Arrays;
 
 import libs.espressif.utils.DataUtil;
 
-public class FastProvInfoSetMessage extends Message {
+public class FastProvInfoSetMessage extends MeshMessage {
     private Integer mProvCount;
     private Long mUnicastAddressMin;
     private Long mUnicastAddressMax;

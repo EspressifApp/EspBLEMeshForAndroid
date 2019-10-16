@@ -1,6 +1,7 @@
 package com.espressif.espblemesh.app;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Environment;
 
 import com.espressif.blemesh.MeshInitialize;
@@ -91,5 +92,28 @@ public class MeshApp extends Application {
         synchronized (mCacheLock) {
             return mCacheMap.get(key);
         }
+    }
+
+    public void putCacheAndSaveCacheKeyInIntent(Intent intent, Object... args) {
+        for (int i = 0; i < args.length; i += 2) {
+            Object keyObj = args[i];
+            if (!(keyObj instanceof String)) {
+                throw new IllegalArgumentException("Key must be String");
+            }
+
+            String key = keyObj.toString();
+            Object cache = args[i + 1];
+            String cacheKey = putCache(cache);
+            intent.putExtra(key, cacheKey);
+        }
+    }
+
+    public Object takeCacheForIntentKey(Intent intent, String intentKey) {
+        String cacheKey = intent.getStringExtra(intentKey);
+        if (cacheKey == null) {
+            return null;
+        }
+
+        return takeCache(cacheKey);
     }
 }

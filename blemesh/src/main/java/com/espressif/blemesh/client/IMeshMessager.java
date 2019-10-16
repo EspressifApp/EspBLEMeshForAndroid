@@ -2,14 +2,16 @@ package com.espressif.blemesh.client;
 
 import com.espressif.blemesh.client.callback.MessageCallback;
 import com.espressif.blemesh.model.Network;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.model.message.custom.FastGroupBindMessage;
 import com.espressif.blemesh.model.message.custom.FastGroupUnbindMessage;
 import com.espressif.blemesh.model.message.custom.FastProvInfoSetMessage;
 import com.espressif.blemesh.model.message.custom.FastProvNodeAddrGetMessage;
 import com.espressif.blemesh.model.message.standard.AppKeyAddMessage;
 import com.espressif.blemesh.model.message.standard.CompositionDataGetMessage;
-import com.espressif.blemesh.model.message.standard.GenericOnOffMessage;
+import com.espressif.blemesh.model.message.standard.GenericLevelGetMessage;
+import com.espressif.blemesh.model.message.standard.GenericLevelSetMessage;
+import com.espressif.blemesh.model.message.standard.GenericOnOffSetMessage;
 import com.espressif.blemesh.model.message.standard.LightCTLGetMessage;
 import com.espressif.blemesh.model.message.standard.LightCTLSetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLGetMessage;
@@ -19,6 +21,7 @@ import com.espressif.blemesh.model.message.standard.ModelSubscriptionAddMessage;
 import com.espressif.blemesh.model.message.standard.ModelSubscriptionDeleteAllMessage;
 import com.espressif.blemesh.model.message.standard.ModelSubscriptionDeleteMessage;
 import com.espressif.blemesh.model.message.standard.ModelSubscriptionOverwriteMessage;
+import com.espressif.blemesh.model.message.standard.NodeResetMessage;
 import com.espressif.blemesh.model.message.standard.RelaySetMessage;
 
 public interface IMeshMessager {
@@ -32,7 +35,7 @@ public interface IMeshMessager {
 
     void setMessageCallback(MessageCallback messageCallback);
 
-    void postMessage(Message message);
+    void postMessage(MeshMessage message);
 
     void appKeyAdd(AppKeyAddMessage message);
 
@@ -48,9 +51,15 @@ public interface IMeshMessager {
 
     void modelSubscriptionDeleteAll(ModelSubscriptionDeleteAllMessage message);
 
+    void nodeReset(NodeResetMessage message);
+
     void relaySet(RelaySetMessage message);
 
-    void genericOnOff(GenericOnOffMessage message);
+    void genericOnOffSet(GenericOnOffSetMessage message);
+
+    void genericLevelGet(GenericLevelGetMessage message);
+
+    void genericLevelSet(GenericLevelSetMessage message);
 
     void lightSetHSL(LightHSLSetMessage message);
 

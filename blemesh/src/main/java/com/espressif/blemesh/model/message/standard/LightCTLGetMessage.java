@@ -3,9 +3,9 @@ package com.espressif.blemesh.model.message.standard;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
-public class LightCTLGetMessage extends Message {
+public class LightCTLGetMessage extends MeshMessage {
     public LightCTLGetMessage(long dstAddress, Node node, App app) {
         super(dstAddress, node, app);
     }

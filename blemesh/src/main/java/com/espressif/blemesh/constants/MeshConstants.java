@@ -79,7 +79,8 @@ public class MeshConstants {
     public static final long NET_KEY_INDEX_DEFAULT = 0x0001;
     public static final String NET_NAME_DEFAULT = "Default Network";
 
-    public static final String MODEL_ID_ONOFF = "1000";
+    public static final String MODEL_ID_GENERIC_ONOFF = "1000";
+    public static final String MODEL_ID_GENERIC_LEVEL = "1002";
     public static final String MODEL_ID_CTL = "1303";
     public static final String MODEL_ID_HSL = "1307";
 }

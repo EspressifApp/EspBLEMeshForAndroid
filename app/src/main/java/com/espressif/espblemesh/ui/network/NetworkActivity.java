@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.espressif.blemesh.client.callback.MeshGattCallback;
@@ -24,6 +25,9 @@ import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Group;
 import com.espressif.blemesh.model.Network;
 import com.espressif.blemesh.model.Node;
+import com.espressif.blemesh.task.GroupDeleteTask;
+import com.espressif.blemesh.task.NodeDeleteTask;
+import com.espressif.blemesh.user.MeshUser;
 import com.espressif.espblemesh.R;
 import com.espressif.espblemesh.constants.Constants;
 import com.espressif.espblemesh.eventbus.GattCloseEvent;
@@ -32,13 +36,13 @@ import com.espressif.espblemesh.eventbus.GattNodeServiceEvent;
 import com.espressif.espblemesh.eventbus.blemesh.FastProvAddrEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelSubscriptionEvent;
 import com.espressif.espblemesh.model.MeshConnection;
-import com.espressif.blemesh.user.MeshUser;
-import com.espressif.blemesh.task.GroupDeleteTask;
-import com.espressif.blemesh.task.NodeDeleteTask;
 import com.espressif.espblemesh.ui.ServiceActivity;
 import com.espressif.espblemesh.ui.network.fastprov.FastProvedActivity;
-import com.espressif.espblemesh.ui.network.node.NodeConfActivity;
+import com.espressif.espblemesh.ui.network.node.NodeActivity;
 import com.espressif.espblemesh.ui.settings.SettingsActivity;
+import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
+import com.github.rubensousa.floatingtoolbar.FloatingToolbarMenuBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,6 +63,7 @@ public class NetworkActivity extends ServiceActivity {
     private static final int MENU_ID_GROUP_ADD = 0x110;
     private static final int MENU_ID_GROUP_DELETE = 0x111;
     private static final int MENU_ID_FAST_PROVED = 0x120;
+    private static final int MENU_ID_HIDE_BOTTOM = 0x300;
 
     private static final int REQUEST_GROUP_ADD = 0x200;
     public static final int REQUEST_NODE = 0x201;
@@ -84,6 +89,8 @@ public class NetworkActivity extends ServiceActivity {
 
     private ScanResult mFastScanResult;
 
+    FloatingToolbar mFloatingToolbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +113,29 @@ public class NetworkActivity extends ServiceActivity {
         mMeshConnection.setApp(mApp);
         mMeshConnection.setNetwork(mNetwork);
         mMeshConnection.setMessagePostCount(messagePostCount);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        mFloatingToolbar = findViewById(R.id.floatingToolbar);
+        mFloatingToolbar.attachFab(fab);
+        mFloatingToolbar.attachAppBarLayout(findViewById(R.id.appBarLayout));
+        fab.setOnClickListener(v -> mFloatingToolbar.show());
+        mFloatingToolbar.setMenu(new FloatingToolbarMenuBuilder(this)
+                .addItem(MENU_ID_GROUP_ADD, R.drawable.ic_add_circle_outline_24dp, R.string.network_menu_group_add)
+                .addItem(MENU_ID_GROUP_DELETE, R.drawable.ic_delete_24dp, R.string.network_menu_group_delete)
+                .addItem(MENU_ID_FAST_PROVED, R.drawable.baseline_grain_24, R.string.network_menu_fast_proved)
+                .addItem(MENU_ID_HIDE_BOTTOM, R.drawable.baseline_unfold_less_24, R.string.network_menu_hide_bottombar)
+                .build());
+        mFloatingToolbar.setClickListener(new FloatingToolbar.ItemClickListener() {
+            @Override
+            public void onItemClick(MenuItem item) {
+                NetworkActivity.this.onMenuItemSelected(item);
+            }
+
+            @Override
+            public void onItemLongClick(MenuItem item) {
+                Toast.makeText(NetworkActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mGroupList = new ArrayList<>();
         mFragments = new ArrayList<>();
@@ -165,16 +195,10 @@ public class NetworkActivity extends ServiceActivity {
                 .setEnabled(false)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        menu.add(MENU_GROUP_GROUP, MENU_ID_GROUP_ADD, 1, R.string.network_menu_group_add);
-        menu.add(MENU_GROUP_GROUP, MENU_ID_GROUP_DELETE, 1, R.string.network_menu_group_delete);
-
-        menu.add(MENU_GROUP_FAST_PROV, MENU_ID_FAST_PROVED, 2, R.string.network_menu_fast_proved);
-
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    private boolean onMenuItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ID_DISCONNECT_BLE: {
                 disconnectNode();
@@ -200,9 +224,18 @@ public class NetworkActivity extends ServiceActivity {
                 startActivity(intent);
                 return true;
             }
+            case MENU_ID_HIDE_BOTTOM: {
+                mFloatingToolbar.hide();
+                return true;
+            }
         }
 
-        return super.onOptionsItemSelected(item);
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return onMenuItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -240,6 +273,12 @@ public class NetworkActivity extends ServiceActivity {
         }
     }
 
+    void attachInFloatingToolbar(RecyclerView recyclerView) {
+        if (mFloatingToolbar != null) {
+            mFloatingToolbar.attachRecyclerView(recyclerView);
+        }
+    }
+
     @Subscribe
     public void onDiscoverNodeService(GattNodeServiceEvent event) {
         if (event.getCode() == MeshGattCallback.CODE_SUCCESS) {
@@ -269,27 +308,9 @@ public class NetworkActivity extends ServiceActivity {
         } else {
             showProgress(false);
         }
-    }
 
-    @Subscribe
-    public void onModelSubscriptionEvent(ModelSubscriptionEvent event) {
-        if (event.getStatus() != 0) {
-            return;
-        }
-
-        for (Group group : mGroupList) {
-            if (group == null) {
-                continue;
-            }
-
-            if (group.getAddress() == event.getGroupAddr()) {
-                if (group.hasModel(event.getElementAddr(), event.getModelId())) {
-                    group.removeModel(event.getNodeMac(), event.getElementAddr(), event.getModelId());
-                } else {
-                    mLog.i("Group Add model " + event.getModelId());
-                    group.addModel(event.getNodeMac(), event.getElementAddr(), event.getModelId());
-                }
-            }
+        if (!mMeshConnection.isConnected()) {
+            Toast.makeText(this, R.string.network_ble_disconnect_toast, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -306,6 +327,7 @@ public class NetworkActivity extends ServiceActivity {
     }
 
     void deleteNode(String nodeMac) {
+        mMeshConnection.nodeReset(mUser.getNodeForMac(nodeMac));
         new NodeDeleteTask(nodeMac).run();
         for (NetworkGroupFragment fragment : mFragments) {
             if (fragment.isViewCreated()) {
@@ -328,7 +350,7 @@ public class NetworkActivity extends ServiceActivity {
     }
 
     void configuration(Node node) {
-        Intent intent = new Intent(this, NodeConfActivity.class);
+        Intent intent = new Intent(this, NodeActivity.class);
         intent.putExtra(Constants.KEY_NODE_MAC, node.getMac());
         startActivity(intent);
     }

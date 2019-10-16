@@ -3,22 +3,33 @@ package com.espressif.blemesh.model.message.standard;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
 import java.util.Random;
 
-public class GenericOnOffMessage extends Message {
+public class GenericOnOffSetMessage extends MeshMessage {
     private boolean mOn;
+    private boolean mUnacknowledged;
 
-    public GenericOnOffMessage(long dstAddr, Node node, App app, boolean on) {
+    public GenericOnOffSetMessage(long dstAddr, Node node, App app, boolean on) {
+        this(dstAddr, node, app, on, false);
+
+    }
+
+    public GenericOnOffSetMessage(long dstAddr, Node node, App app, boolean on, boolean unacknowledged) {
         super(dstAddr, node, app);
 
         mOn = on;
+        mUnacknowledged = unacknowledged;
     }
 
     @Override
     public byte[] getOpCode() {
-        return new byte[]{(byte) 0x82, 0x03};
+        if (mUnacknowledged) {
+            return new byte[]{(byte) 0x82, 0x03};
+        } else {
+            return new byte[]{(byte) 0x82, 0x02};
+        }
     }
 
     @Override

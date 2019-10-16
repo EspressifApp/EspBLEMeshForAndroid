@@ -2,7 +2,9 @@ package com.espressif.espblemesh.ui.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -10,32 +12,49 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
+import android.preference.PreferenceScreen;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.LongSparseArray;
 import android.widget.Button;
 
+import androidx.annotation.Nullable;
+
 import com.espressif.blemesh.model.App;
-import com.espressif.espblemesh.R;
-import com.espressif.espblemesh.constants.Constants;
-import com.espressif.blemesh.user.MeshUser;
 import com.espressif.blemesh.task.AppAddTask;
 import com.espressif.blemesh.task.AppDeleteTask;
+import com.espressif.blemesh.user.MeshUser;
+import com.espressif.espblemesh.R;
+import com.espressif.espblemesh.constants.Constants;
 
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import libs.espressif.app.AppUtil;
+import libs.espressif.github.GitHubGetLatestReleaseTask;
+import libs.espressif.github.GitHubRelease;
+import libs.espressif.log.EspLog;
 import libs.espressif.utils.DataUtil;
 import libs.espressif.utils.TextUtils;
 
 public class SettingsFragment extends PreferenceFragment implements SettingsConstants,
         Preference.OnPreferenceChangeListener {
+    private final EspLog mLog = new EspLog(getClass());
+
     private MeshUser mUser;
 
     private SharedPreferences mSharedPref;
+
+    private Preference mVersionCheckPref;
+    private GitHubGetLatestReleaseTask mVersionCheckTask;
+    private long mAppVersionCode;
 
     private EditTextPreference mAppNewPref;
     private MultiSelectListPreference mAppDelPref;
@@ -57,12 +76,23 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCons
         initMessage();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mVersionCheckTask != null) {
+            mVersionCheckTask.cancel();
+            mVersionCheckTask = null;
+        }
+    }
+
     private void initVersion() {
         Preference preference = findPreference(KEY_VERSION);
         String versionName = AppUtil.getVersionName(getActivity());
-        long versionCode = AppUtil.getVersionCode(getActivity());
-        String summary = String.format(Locale.ENGLISH, "%s(%d)", versionName, versionCode);
-        preference.setSummary(summary);
+        preference.setSummary(versionName);
+
+        mAppVersionCode = AppUtil.getVersionCode(getActivity());
+        mVersionCheckPref = findPreference(KEY_VERSION_CHECK);
     }
 
     private void initApp() {
@@ -125,7 +155,11 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCons
     private void updateAppEntriesPref() {
         LongSparseArray<App> appMap = mUser.getAppSparseArray();
 
-        String usedAppKeyIndex = mSharedPref.getString(KEY_APP_USED, String.valueOf(Constants.APP_KEY_INDEX_DEFAULT));
+        String usedAppKeyDef = String.valueOf(Constants.APP_KEY_INDEX_DEFAULT);
+        String usedAppKeyIndex = mSharedPref.getString(KEY_APP_USED, usedAppKeyDef);
+        if (usedAppKeyIndex == null) {
+            usedAppKeyIndex = usedAppKeyDef;
+        }
         String summary = "";
         CharSequence[] appkeyArray = new CharSequence[appMap.size()];
         CharSequence[] appIndexArray = new CharSequence[appMap.size()];
@@ -138,7 +172,6 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCons
             if (usedAppKeyIndex.equals(keyIndex)) {
                 summary = key;
             }
-
         }
         mAppUsedPref.setOnPreferenceChangeListener(null);
         mAppUsedPref.setEntries(appkeyArray);
@@ -160,7 +193,6 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCons
         mAppDelPref.setEntries(appkeyArray);
         mAppDelPref.setEntryValues(appIndexArray);
         mAppDelPref.setOnPreferenceChangeListener(this);
-
     }
 
     private void initMessage() {
@@ -173,6 +205,17 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCons
         long messageBackpressure = SettingsActivity.getMessageBackpressure(getActivity());
         mMessageBackpressurePref.setSummary(String.valueOf(messageBackpressure));
         mMessageBackpressurePref.setOnPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == mVersionCheckPref) {
+            runVersionCheckTask();
+
+            return true;
+        }
+
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     @Override
@@ -225,6 +268,8 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCons
             }
             mMessagePostCountPref.setSummary(postCount);
             mSharedPref.edit().putString(KEY_MESSAGE_POST_COUNT, postCount).apply();
+
+            return true;
         } else if (preference == mMessageBackpressurePref) {
             String backpressure = MESSAGE_BACKPRESSURE_DEFAULT;
             if (!TextUtils.isEmpty(newValue.toString())) {
@@ -232,7 +277,104 @@ public class SettingsFragment extends PreferenceFragment implements SettingsCons
             }
             mMessageBackpressurePref.setSummary(backpressure);
             mSharedPref.edit().putString(KEY_MESSAGE_BACKPRESSURE, backpressure).apply();
+
+            return true;
         }
+
         return false;
+    }
+
+    private void runVersionCheckTask() {
+        if (mVersionCheckTask == null) {
+            mVersionCheckTask = new GitHubGetLatestReleaseTask(GITHUB_ACCOUNT, GITHUB_REPOSITORY);
+            mVersionCheckPref.setSummary(R.string.settings_version_check_ing);
+            AtomicReference<GitHubRelease> releaseRef = new AtomicReference<>();
+            AtomicBoolean hasNew = new AtomicBoolean(false);
+            Observable.just(releaseRef)
+                    .subscribeOn(Schedulers.io())
+                    .doOnNext(reference -> {
+                        GitHubRelease release = mVersionCheckTask.execute();
+                        mLog.d("Get release info " + (release != null));
+                        reference.set(release);
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(reference -> {
+                        mVersionCheckTask = null;
+                        GitHubRelease release = reference.get();
+                        if (release == null) {
+                            mVersionCheckPref.setSummary(R.string.settings_version_check_none);
+                            return false;
+                        }
+                        return true;
+                    })
+                    .flatMap(reference -> {
+                        GitHubRelease release = reference.get();
+                        return Observable.fromIterable(release.assets);
+                    })
+                    .filter(asset -> {
+                        if (TextUtils.isEmpty(asset.name)) {
+                            return false;
+                        }
+                        if (!asset.name.endsWith(".apk")) {
+                            return false;
+                        }
+                        String fileName = asset.name.substring(0, asset.name.length() - 4);
+                        String[] splits = fileName.split("-");
+                        if (splits.length != 3) {
+                            return false;
+                        }
+                        try {
+                            long releaseVersionCode = Long.parseLong(splits[2]);
+                            return releaseVersionCode > mAppVersionCode;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    })
+                    .map(asset -> asset.browser_download_url)
+                    .subscribe(new Observer<String>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                        }
+
+                        @Override
+                        public void onNext(String url) {
+                            mLog.d("Discover new release " + url);
+                            hasNew.set(true);
+                            mVersionCheckPref.setSummary(R.string.settings_version_check_upgrade);
+                            showUpgradeDialog(url);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            mLog.w("Check release error");
+                            e.printStackTrace();
+                            mVersionCheckTask = null;
+                            mVersionCheckPref.setSummary(R.string.settings_version_check_none);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            mVersionCheckTask = null;
+                            mLog.d("Check release complete");
+                            if (!hasNew.get()) {
+                                mVersionCheckPref.setSummary(R.string.settings_version_check_none);
+                            }
+                        }
+                    });
+
+        }
+    }
+
+    private void showUpgradeDialog(String url) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(R.string.settings_version_check_dialog_message)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    Uri uri = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                })
+                .show();
     }
 }

@@ -15,10 +15,19 @@ public abstract class MessageCallback {
     public void onModelSubscriptionStatus(int status, long groupAddr, String nodeMac, long elementAddr, String modelId) {
     }
 
+    public void onNodeResetStatus(long nodeAddress, String nodeMac) {
+    }
+
     public void onRelayStatus(int state, int count, int step) {
     }
 
-    public void onLightHSLStatus(int[] rgb) {
+    public void onGenericOnOffStatus(boolean on) {
+    }
+
+    public void onGenericLevelStatus(int level){
+    }
+
+    public void onLightHSLStatus(float[] hsl) {
     }
 
     public void onLightCTLStatus(int lightness, int temperature, int deltaUV) {

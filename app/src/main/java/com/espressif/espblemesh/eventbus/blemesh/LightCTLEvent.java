@@ -1,5 +1,9 @@
 package com.espressif.espblemesh.eventbus.blemesh;
 
+import androidx.annotation.NonNull;
+
+import java.util.Locale;
+
 public class LightCTLEvent {
     private int mLightness;
     private int mTemperature;
@@ -21,5 +25,13 @@ public class LightCTLEvent {
 
     public int getDeltaUV() {
         return mDeltaUV;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH,
+                "LightCTLEvent >> Lightness:%d, Temperature:%d, DeltaUV:%d",
+                mLightness, mTemperature, mDeltaUV);
     }
 }

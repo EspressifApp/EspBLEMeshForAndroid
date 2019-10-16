@@ -3,10 +3,10 @@ package com.espressif.blemesh.model.message.custom;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.utils.MeshUtils;
 
-public class OtaStartMessage extends Message {
+public class OtaStartMessage extends MeshMessage {
     private byte[] mManufacturerID;
     private byte[] mSoftApSSID;
     private byte[] mSoftApPassword;

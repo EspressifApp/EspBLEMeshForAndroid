@@ -2,9 +2,9 @@ package com.espressif.blemesh.model.message.standard.proxyconfiguration;
 
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
-abstract class ProxyConfigurationMessage extends Message {
+abstract class ProxyConfigurationMessage extends MeshMessage {
     ProxyConfigurationMessage(Node node) {
         super(MeshConstants.ADDRESS_UNASSIGNED, node);
 

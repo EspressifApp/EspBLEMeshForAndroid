@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/nav_add_network"
+        android:icon="@drawable/outline_share_24"
+        android:title="@string/network_add_title" />
+    <item
+        android:id="@+id/nav_provision"
+        android:icon="@drawable/outline_add_box_24"
+        android:title="@string/provisioning_title" />
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/outline_settings_applications_24"
+        android:title="@string/settings_title" />
+</menu>

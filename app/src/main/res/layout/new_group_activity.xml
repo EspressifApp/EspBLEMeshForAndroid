@@ -46,9 +46,8 @@
                 android:hint="@string/group_name_hint"
                 android:inputType="text" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/ok_btn"
-                style="@style/MeshColorButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"

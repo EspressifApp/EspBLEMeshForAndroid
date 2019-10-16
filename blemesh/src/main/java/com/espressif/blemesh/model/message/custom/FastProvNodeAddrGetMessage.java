@@ -3,9 +3,9 @@ package com.espressif.blemesh.model.message.custom;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
-public class FastProvNodeAddrGetMessage extends Message {
+public class FastProvNodeAddrGetMessage extends MeshMessage {
     public FastProvNodeAddrGetMessage(Node node, App app) {
         super(node.getUnicastAddress(), node, app);
     }

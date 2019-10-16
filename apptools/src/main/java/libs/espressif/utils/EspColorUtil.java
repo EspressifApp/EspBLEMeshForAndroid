@@ -1,6 +1,6 @@
 package libs.espressif.utils;
 
-public class ColorUtil {
+public class EspColorUtil {
     /**
      * @param r [0..255]
      * @param g [0..255]

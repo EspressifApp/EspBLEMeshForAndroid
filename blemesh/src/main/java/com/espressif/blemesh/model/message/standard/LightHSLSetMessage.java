@@ -1,37 +1,47 @@
 package com.espressif.blemesh.model.message.standard;
 
-import androidx.core.graphics.ColorUtils;
-
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.utils.MeshUtils;
 
-public class LightHSLSetMessage extends Message {
+public class LightHSLSetMessage extends MeshMessage {
     private float[] mHSL;
 
+    private boolean mUnacknowledged;
+
+    /**
+     * @param hsl h: [0 .. 360), s: [0...1], l: [0...1]
+     */
     public LightHSLSetMessage(long dstAddress, Node node, App app, float[] hsl) {
+        this(dstAddress, node, app, hsl, false);
+    }
+
+    /**
+     * @param hsl h: [0 .. 360), s: [0...1], l: [0...1]
+     */
+    public LightHSLSetMessage(long dstAddress, Node node, App app, float[] hsl, boolean unacknowledged) {
         super(dstAddress, node, app);
 
         mHSL = hsl;
-    }
 
-    public LightHSLSetMessage(long dstAddress, Node node, App app, int color) {
-        super(dstAddress, node, app);
-
-        mHSL = new float[3];
-        ColorUtils.colorToHSL(color, mHSL);
+        mUnacknowledged = unacknowledged;
     }
 
     @Override
     public byte[] getOpCode() {
-        return new byte[]{(byte) 0x82, 0x76};
+        if (mUnacknowledged) {
+            return new byte[]{(byte) 0x82, 0x77};
+        } else {
+            return new byte[]{(byte) 0x82, 0x76};
+        }
+
     }
 
     @Override
     public byte[] getParameters() {
-        int[] lightHSL = MeshUtils.HSLtoLightHSL(mHSL);
+        int[] lightHSL = MeshUtils.HSLtoLightMeshHSL(mHSL);
         int lightLightness = lightHSL[2];
         int lightHue = lightHSL[0];
         int lightSaturation = lightHSL[1];

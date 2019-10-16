@@ -2,11 +2,14 @@
 <resources>
     <string name="app_name">EspBLEMesh</string>
 
-    <string name="main_title">EspBLEMesh</string>
-    <string name="main_menu_provision_scan">配网</string>
+    <string name="main_title">网络</string>
     <string name="main_menu_new_network">新建网络</string>
     <string name="main_menu_settings">设置</string>
     <string name="main_bt_disable_toast">蓝牙不可用</string>
+    <string name="main_network_info_title">网络信息</string>
+    <string name="main_network_info_message">名称: %1$s\n\nKey: %2$s\n\nKey Index: %3$d\n\n节点总数: %4$d\n\n在线数量: %5$d</string>
+
+    <string name="network_add_title">新建网络</string>
     <string name="main_new_network_key_title">网络 Key</string>
     <string name="main_new_network_key_format_error">Key 格式错误r</string>
     <string name="main_new_network_key_length_error">Key 的长度必须为 32</string>
@@ -17,7 +20,7 @@
 
     <string name="configure_connect">连接</string>
 
-    <string name="provision_scan_title">扫描设备</string>
+    <string name="provision_scan_title">扫描待配网设备</string>
     <string name="provision_scan_menu_filter">过滤</string>
     <string name="provision_scan_filter_rssi_negative">-</string>
     <string name="provision_scan_filter_rssi_min">RSSI ≥</string>
@@ -25,7 +28,7 @@
     <string name="provision_scan_filter_name">设备名</string>
     <string name="provision_scan_filter_uuid">UUID</string>
 
-    <string name="provisioning_title">配网</string>
+    <string name="provisioning_title">设备配网</string>
     <string name="provisioning_config_device_name">节点名字</string>
     <string name="provisioning_config_network">网络</string>
     <string name="provisioning_config_fast_prov_check">快速配网</string>
@@ -37,6 +40,7 @@
     <string name="network_menu_group_add">新建分组</string>
     <string name="network_menu_group_delete">删除分组</string>
     <string name="network_menu_fast_proved">快速配网的设备</string>
+    <string name="network_menu_hide_bottombar">收起工具栏</string>
     <string name="network_group_item_conncet">连接</string>
     <string name="network_group_item_configuration">配置</string>
     <string name="network_group_switch_onoff">开/关</string>
@@ -45,15 +49,18 @@
     <string name="network_group_popup_menu_ota">OTA</string>
     <string name="network_group_delete_all_message">不能删除当前分组</string>
     <string name="network_group_delete_dialog_message">是否删除分组 %s?</string>
+    <string name="network_ble_disconnect_toast">BLE 连接已断开</string>
 
+    <string name="node_menu_info">信息</string>
+    <string name="node_model_list">Model 列表</string>
     <string name="node_composition_data_get">Composition Data Get</string>
     <string name="node_relay_count">Relay count</string>
     <string name="node_relay_step">Relay step</string>
     <string name="node_relay_set">Relay set</string>
-    <string name="node_bind_app_key">Bind App Key</string>
-    <string name="node_model_bind_group">Bind group</string>
-    <string name="node_model_bind_group_no_message">No group can be bound</string>
-    <string name="node_model_unbind_group">Unbind</string>
+    <string name="node_bind_app_key">绑定 App Key</string>
+    <string name="node_model_bind_group">订阅分组</string>
+    <string name="node_model_bind_group_no_message">没有可以订阅的分组</string>
+    <string name="node_model_unbind_group">取消订阅</string>
     <string name="node_cid_label">cid:</string>
     <string name="node_pid_label">pid:</string>
     <string name="node_vid_label">vid:</string>
@@ -62,7 +69,12 @@
     <string name="node_connect">Connect</string>
     <string name="node_configuration">Configuration</string>
     <string name="node_configuration_onoff">On/Off</string>
-    <string name="node_control_group">Group</string>
+    <string name="node_control_group">分组</string>
+    <string name="node_generic_level_progress">进度:</string>
+
+    <string name="model_operation_title">操作</string>
+    <string name="model_group_title">分组</string>
+    <string name="model_bind_group_title">选择需要订阅的分组</string>
 
     <string name="group_new_group_title">新建分组</string>
     <string name="group_name_hint">输入组名</string>
@@ -91,6 +103,12 @@
     <string name="settings_title">设置</string>
     <string name="settings_version_category_title">版本</string>
     <string name="settings_version_title">版本</string>
+    <string name="settings_version_check_title">检查版本更新</string>
+    <string name="settings_version_check_ing">正在检查…</string>
+    <string name="settings_version_check_upgrade">发现新版本</string>
+    <string name="settings_version_check_none">没有发现更新版本</string>
+    <string name="settings_version_check_dialog_title">发现新版本</string>
+    <string name="settings_version_check_dialog_message">是否升级到最新版本？</string>
     <string name="settings_app_category_title">Mesh App</string>
     <string name="settings_app_new_title">新建 App Key</string>
     <string name="settings_app_delete_title">删除 App Key</string>

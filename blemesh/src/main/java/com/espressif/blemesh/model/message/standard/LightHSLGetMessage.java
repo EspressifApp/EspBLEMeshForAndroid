@@ -3,9 +3,9 @@ package com.espressif.blemesh.model.message.standard;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
-public class LightHSLGetMessage extends Message {
+public class LightHSLGetMessage extends MeshMessage {
 
     public LightHSLGetMessage(long dstAddress, Node node, App app) {
         super(dstAddress, node, app);

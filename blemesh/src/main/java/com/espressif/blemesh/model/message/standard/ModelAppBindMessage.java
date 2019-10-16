@@ -3,12 +3,12 @@ package com.espressif.blemesh.model.message.standard;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.Model;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.utils.MeshUtils;
 
 import libs.espressif.utils.DataUtil;
 
-public class ModelAppBindMessage extends Message {
+public class ModelAppBindMessage extends MeshMessage {
     private Model mModel;
     private long mAppKeyIndex;
 

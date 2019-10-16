@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FloatingToolbar">
+        <attr name="floatingToastOnLongClick" format="boolean"/>
+        <attr name="floatingHandleFabClick" format="boolean"/>
+        <attr name="floatingAutoHide" format="boolean"/>
+        <attr name="floatingMenu" format="reference"/>
+        <attr name="floatingItemBackground" format="reference"/>
+        <attr name="floatingCustomView" format="reference"/>
+    </declare-styleable>
+
+    <dimen name="floatingtoolbar_start_elevation">6dp</dimen>
+    <dimen name="floatingtoolbar_translationz">2dp</dimen>
+
+</resources>

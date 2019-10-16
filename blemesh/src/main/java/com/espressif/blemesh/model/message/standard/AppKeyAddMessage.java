@@ -2,12 +2,12 @@ package com.espressif.blemesh.model.message.standard;
 
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 import com.espressif.blemesh.utils.MeshUtils;
 
 import libs.espressif.utils.DataUtil;
 
-public class AppKeyAddMessage extends Message {
+public class AppKeyAddMessage extends MeshMessage {
     private byte[] mAppKey;
     private long mAppKeyIndex;
     private long mNetKeyIndex;

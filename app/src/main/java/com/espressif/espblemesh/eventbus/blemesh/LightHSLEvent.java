@@ -1,25 +1,37 @@
 package com.espressif.espblemesh.eventbus.blemesh;
 
+import androidx.annotation.NonNull;
+
+import java.util.Locale;
+
 public class LightHSLEvent {
-    private int mRed;
-    private int mGreen;
-    private int mBlue;
+    private float mHue;
+    private float mSaturation;
+    private float mLightness;
 
-    public LightHSLEvent(int red, int green, int blue) {
-        mRed = red;
-        mGreen = green;
-        mBlue = blue;
+    public LightHSLEvent(float hue, float saturation, float lightness) {
+        mHue = hue;
+        mSaturation = saturation;
+        mLightness = lightness;
     }
 
-    public int getRed() {
-        return mRed;
+    public float getHue() {
+        return mHue;
     }
 
-    public int getGreen() {
-        return mGreen;
+    public float getSaturation() {
+        return mSaturation;
     }
 
-    public int getBlue() {
-        return mBlue;
+    public float getLightness() {
+        return mLightness;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH,
+                "LightHSLEvent >> Hue:%f, Saturation:%f, Lightness:%f",
+                mHue, mSaturation, mLightness);
     }
 }

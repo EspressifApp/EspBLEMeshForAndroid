@@ -13,6 +13,12 @@ public class Constants {
     public static final String KEY_ID = "id";
     public static final String KEY_NAME = "name";
 
+    public static final String KEY_NODE = "node";
+    public static final String KEY_MODEL = "model";
+    public static final String KEY_GROUPS = "groups";
+    public static final String KEY_BIND_GROUPS = "bind_groups";
+    public static final String KEY_OPERATION = "operation";
+
     public static final long APP_ADDRESS_DEFAULT = MeshConstants.APP_ADDRESS_DEFAULT;
     public static final long APP_KEY_INDEX_DEFAULT = MeshConstants.APP_KEY_INDEX_DEFAULT;
 

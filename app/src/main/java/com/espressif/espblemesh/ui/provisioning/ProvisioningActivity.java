@@ -289,7 +289,7 @@ public class ProvisioningActivity extends BaseActivity {
                     Intent intent = new Intent();
                     intent.putExtra(Constants.KEY_NODE_MAC, mScanResult.getDevice().getAddress());
                     intent.putExtra(Constants.KEY_FAST_FROV, false);
-//                    intent.putExtra(Constants.KEY_NETWORK_INDEX, mMessager.getNetwork().getKeyIndex());
+                    intent.putExtra(Constants.KEY_NETWORK_INDEX, mMessager.getNetwork().getKeyIndex());
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -348,7 +348,7 @@ public class ProvisioningActivity extends BaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra(Constants.KEY_NODE_MAC, mScanResult.getDevice().getAddress());
                 intent.putExtra(Constants.KEY_FAST_FROV, false);
-//                intent.putExtra(Constants.KEY_NETWORK_INDEX, mMessager.getNetwork().getKeyIndex());
+                intent.putExtra(Constants.KEY_NETWORK_INDEX, mMessager.getNetwork().getKeyIndex());
                 setResult(RESULT_OK, intent);
                 finish();
             }

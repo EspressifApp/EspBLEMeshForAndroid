@@ -4,7 +4,7 @@ import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
 
-public abstract class Message {
+public abstract class MeshMessage {
     private static final int CTL_DEFAULT = 0;
     private static final int TTL_DEFAULT = 10;
 
@@ -19,15 +19,15 @@ public abstract class Message {
     private final Node mNode;
     private App mApp;
 
-    public Message(long dstAddress) {
+    public MeshMessage(long dstAddress) {
         this(dstAddress,null, null);
     }
 
-    public Message(long dstAddress, Node node) {
+    public MeshMessage(long dstAddress, Node node) {
         this(dstAddress, node, null);
     }
 
-    public Message(long dstAddress, Node node, App app) {
+    public MeshMessage(long dstAddress, Node node, App app) {
         mDstAddress = dstAddress;
         mNode = node;
         mApp = app;

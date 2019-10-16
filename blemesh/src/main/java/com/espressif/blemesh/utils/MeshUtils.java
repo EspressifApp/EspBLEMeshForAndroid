@@ -6,7 +6,7 @@ import com.espressif.blemesh.db.box.MeshObjectBox;
 import java.util.Random;
 
 import libs.espressif.security.EspMD5;
-import libs.espressif.utils.ColorUtil;
+import libs.espressif.utils.EspColorUtil;
 import libs.espressif.utils.DataUtil;
 
 public class MeshUtils {
@@ -269,22 +269,25 @@ public class MeshUtils {
 //        return DataUtil.hexStringToBigEndianBytes(mod.toString(16));
     }
 
-    public static int[] HSLtoLightHSL(float[] hsl) {
+    /**
+     * @param hsl: h: [0 .. 360), s: [0...1], l: [0...1]
+     */
+    public static int[] HSLtoLightMeshHSL(float[] hsl) {
         int lightHue = (int) (hsl[0] * 65535f / 360f);
         int lightSaturation = (int) (hsl[1] * 65535f);
         int lightLightness = (int) (65535.0 * Math.sqrt(hsl[2] / 65535.0));
         return new int[]{lightHue, lightSaturation, lightLightness};
     }
 
-    public static float[] lightHSLtoHSL(int[] lightHSL) {
+    public static float[] lightMeshHSLtoHSL(int[] lightHSL) {
         float h = 360f * ((float) lightHSL[0]) / 65535f;
         float s = ((float) lightHSL[1]) / 65535f;
         float l = (float) (Math.pow(lightHSL[2], 2) / 65535.0);
         return new float[]{h, s, l};
     }
 
-    public static int[] lightHSLtoRGB(int[] lightHSL) {
-        float[] hsl = lightHSLtoHSL(lightHSL);
-        return ColorUtil.HSLToRGB(hsl[0] / 360f, hsl[1], hsl[2]);
+    public static int[] lightMeshHSLtoRGB(int[] lightHSL) {
+        float[] hsl = lightMeshHSLtoHSL(lightHSL);
+        return EspColorUtil.HSLToRGB(hsl[0] / 360f, hsl[1], hsl[2]);
     }
 }

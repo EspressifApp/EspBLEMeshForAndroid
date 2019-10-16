@@ -778,7 +778,7 @@ public class FastProvedActivity extends BaseActivity {
             while (!stop) {
                 try {
                     OnOffParams params = taskQueue.take();
-                    mMeshConnection.onOff(params.on, params.node, params.addr);
+                    mMeshConnection.genericOnOff(params.on, params.node, params.addr);
 
                     sleep(interval);
                 } catch (InterruptedException e) {

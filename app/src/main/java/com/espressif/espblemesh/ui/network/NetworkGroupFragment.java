@@ -110,6 +110,7 @@ public class NetworkGroupFragment extends Fragment {
         mNodeAdapter = new NodeAdapter();
         nodesView.setAdapter(mNodeAdapter);
         updateNodeList();
+        mActivity.attachInFloatingToolbar(nodesView);
 
         mGroupSwitch = view.findViewById(R.id.group_switch);
         mGroupSwitch.setEnabled(mMeshConnection.isConnected());
@@ -119,7 +120,7 @@ public class NetworkGroupFragment extends Fragment {
                 return;
             }
 
-            mMeshConnection.onOff(isChecked, null, mGroup.getAddress());
+            mMeshConnection.genericOnOff(isChecked, null, mGroup.getAddress());
         });
 
         mRefreshLayout = view.findViewById(R.id.pager_refresh_layout);
@@ -134,7 +135,7 @@ public class NetworkGroupFragment extends Fragment {
             MainService service = mActivity.getService();
             if (service.isBTEnable()) {
                 service.startScanBle();
-                mHandler.postDelayed(mScanOverRunnable, 2500);
+                mHandler.postDelayed(mScanOverRunnable, 1500);
             } else {
                 Toast.makeText(mActivity, R.string.main_bt_disable_toast, Toast.LENGTH_SHORT).show();
                 mHandler.post(() -> mRefreshLayout.setRefreshing(false));
@@ -259,6 +260,7 @@ public class NetworkGroupFragment extends Fragment {
         ImageView icon;
         TextView text1;
         TextView text2;
+        TextView text3;
         ImageView image1;
         Button connectBtn;
         Button configBtn;
@@ -269,6 +271,7 @@ public class NetworkGroupFragment extends Fragment {
             icon = itemView.findViewById(R.id.icon);
             text1 = itemView.findViewById(R.id.text1);
             text2 = itemView.findViewById(R.id.text2);
+            text3 = itemView.findViewById(R.id.text3);
             image1 = itemView.findViewById(R.id.image1);
             connectBtn = itemView.findViewById(R.id.connect_btn);
             configBtn = itemView.findViewById(R.id.configuration_btn);
@@ -358,7 +361,7 @@ public class NetworkGroupFragment extends Fragment {
             boolean hasAppKey = node.containsAppKeyIndex(mActivity.getApp().getKeyIndex());
             if (hasCompo && hasAppKey) {
                 for (Element element : node.getElementList()) {
-                    Model model = element.getModeForId(MeshConstants.MODEL_ID_ONOFF);
+                    Model model = element.getModeForId(MeshConstants.MODEL_ID_GENERIC_ONOFF);
                     if (model != null) {
                         if (model.hasAppKey()) {
                             holder.icon.setImageResource(R.drawable.ic_lightbulb_outline_24dp);
@@ -370,13 +373,17 @@ public class NetworkGroupFragment extends Fragment {
 
             holder.text1.setText(node.getName());
             holder.text2.setText(node.getMac());
+            holder.text3.setText("");
 
-            if (mVagrantMacs.contains(node.getMac())) {
+            boolean isVagrantNode = mVagrantMacs.contains(node.getMac());
+            if (!isVagrantNode) {
+                appendModelInfo(holder.text3, node);
+            }
+
+            if (isVagrantNode) {
                 holder.text1.setTextColor(mActivity.getResources().getColor(R.color.vagrantNode));
-                holder.text2.setTextColor(mActivity.getResources().getColor(R.color.vagrantNode));
             } else {
                 holder.text1.setTextColor(mActivity.getResources().getColor(R.color.networkNode));
-                holder.text2.setTextColor(mActivity.getResources().getColor(R.color.networkNode));
             }
 
             if (Objects.equals(node.getMac(), mMeshConnection.getConnectedAddress())) {
@@ -389,8 +396,7 @@ public class NetworkGroupFragment extends Fragment {
             holder.connectBtn.setVisibility(connected ? View.GONE : View.VISIBLE);
 
             holder.configBtn.setVisibility(connected ? View.VISIBLE : View.GONE);
-
-            if (mVagrantMacs.contains(node.getMac())) {
+            if (isVagrantNode) {
                 holder.configBtn.setVisibility(View.GONE);
             }
         }
@@ -399,6 +405,24 @@ public class NetworkGroupFragment extends Fragment {
         public int getItemCount() {
             return mNodeList.size();
         }
+    }
+
+    private void appendModelInfo(TextView tv, Node node) {
+        for (Element element : node.getElementList()) {
+            boolean hasAppendElement = false;
+            for (Model model : element.getModelList()) {
+                if (mGroup != null && mGroup.hasModel(element.getUnicastAddress(), model.getId())) {
+                    if (!hasAppendElement) {
+                        tv.append(String.format("Element: %04X\n", element.getUnicastAddress()));
+                        hasAppendElement = true;
+                    }
+
+                    tv.append("    Model: ");
+                    tv.append(model.getId());
+                    tv.append("\n");
+                }
+            } // Model for end
+        } // Element for end
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -449,6 +473,7 @@ public class NetworkGroupFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onModelSubscriptionEvent(ModelSubscriptionEvent event) {
+        mLog.i("onModelSubscriptionEvent");
         updateNodeList();
     }
 

@@ -3,7 +3,7 @@ package com.espressif.blemesh.model.message.custom;
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.App;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import libs.espressif.utils.DataUtil;
 
-public class FastGroupUnbindMessage extends Message {
+public class FastGroupUnbindMessage extends MeshMessage {
     private long mGroupAddr;
     private List<Long> mNodeAddrList;
 

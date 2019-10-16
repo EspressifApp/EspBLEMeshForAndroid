@@ -8,6 +8,7 @@ import com.espressif.espblemesh.constants.Constants;
 
 public interface SettingsConstants {
     String KEY_VERSION = "settings_version_key";
+    String KEY_VERSION_CHECK = "settings_version_check_key";
 
     String KEY_APP_NEW = "settings_app_new_key";
     String KEY_APP_DELETE = "settings_app_delete_key";
@@ -18,4 +19,7 @@ public interface SettingsConstants {
 
     String MESSAGE_POST_COUNT_DEFAULT = "3";
     String MESSAGE_BACKPRESSURE_DEFAULT = "300";
+
+    String GITHUB_ACCOUNT = "EspressifApp";
+    String GITHUB_REPOSITORY = "EspBLEMeshForAndroid";
 }

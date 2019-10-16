@@ -2,9 +2,9 @@ package com.espressif.blemesh.model.message.standard;
 
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
-public class CompositionDataGetMessage extends Message {
+public class CompositionDataGetMessage extends MeshMessage {
     private int mPage;
 
     public CompositionDataGetMessage(Node node, int page) {

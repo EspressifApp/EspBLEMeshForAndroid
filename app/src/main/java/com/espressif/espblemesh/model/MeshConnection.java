@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.le.ScanResult;
 
+import androidx.core.graphics.ColorUtils;
+
 import com.espressif.blemesh.client.IMeshMessager;
 import com.espressif.blemesh.client.MeshGattClient;
 import com.espressif.blemesh.client.callback.MeshGattCallback;
@@ -19,7 +21,8 @@ import com.espressif.blemesh.model.message.custom.FastProvInfoSetMessage;
 import com.espressif.blemesh.model.message.custom.FastProvNodeAddrGetMessage;
 import com.espressif.blemesh.model.message.standard.AppKeyAddMessage;
 import com.espressif.blemesh.model.message.standard.CompositionDataGetMessage;
-import com.espressif.blemesh.model.message.standard.GenericOnOffMessage;
+import com.espressif.blemesh.model.message.standard.GenericLevelSetMessage;
+import com.espressif.blemesh.model.message.standard.GenericOnOffSetMessage;
 import com.espressif.blemesh.model.message.standard.LightCTLGetMessage;
 import com.espressif.blemesh.model.message.standard.LightCTLSetMessage;
 import com.espressif.blemesh.model.message.standard.LightHSLGetMessage;
@@ -27,6 +30,7 @@ import com.espressif.blemesh.model.message.standard.LightHSLSetMessage;
 import com.espressif.blemesh.model.message.standard.ModelAppBindMessage;
 import com.espressif.blemesh.model.message.standard.ModelSubscriptionAddMessage;
 import com.espressif.blemesh.model.message.standard.ModelSubscriptionDeleteMessage;
+import com.espressif.blemesh.model.message.standard.NodeResetMessage;
 import com.espressif.blemesh.model.message.standard.RelaySetMessage;
 import com.espressif.blemesh.user.MeshUser;
 import com.espressif.espblemesh.app.MeshApp;
@@ -96,13 +100,11 @@ public enum MeshConnection {
         mGattClient.setMeshCallback(new MeshGattCallback() {
             @Override
             public void onDiscoverNodeServiceResult(int code, IMeshMessager messager) {
-                switch (code) {
-                    case CODE_SUCCESS: {
-                        mMessager = messager;
-                        mMessager.setNetwork(mNetwork);
-                        mMessager.setMessageCallback(new MessageCB());
-                        break;
-                    }
+                mLog.d("onDiscoverNodeServiceResult " + code);
+                if (code == CODE_SUCCESS) {
+                    mMessager = messager;
+                    mMessager.setNetwork(mNetwork);
+                    mMessager.setMessageCallback(new MessageCB());
                 }
 
                 GattNodeServiceEvent event = new GattNodeServiceEvent(code, messager);
@@ -138,11 +140,19 @@ public enum MeshConnection {
         return mMessager;
     }
 
-    public void onOff(boolean on, Node node, long addr) {
+    public void genericOnOff(boolean on, Node node, long addr) {
         if (mMessager != null) {
-            GenericOnOffMessage message = new GenericOnOffMessage(addr, node, mApp, on);
+            GenericOnOffSetMessage message = new GenericOnOffSetMessage(addr, node, mApp, on, true);
             message.setPostCount(mMessagePostCount);
-            mMessager.genericOnOff(message);
+            mMessager.genericOnOffSet(message);
+        }
+    }
+
+    public void genericLevel(int level, Node node, long addr) {
+        if (mMessager != null) {
+            GenericLevelSetMessage message = new GenericLevelSetMessage(addr, node, mApp, level, true);
+            message.setPostCount(mMessagePostCount);
+            mMessager.genericLevelSet(message);
         }
     }
 
@@ -197,6 +207,14 @@ public enum MeshConnection {
         }
     }
 
+    public void nodeReset(Node node) {
+        if (mMessager != null) {
+            NodeResetMessage message = new NodeResetMessage(node, node.getUnicastAddress());
+            message.setPostCount(mMessagePostCount);
+            mMessager.nodeReset(message);
+        }
+    }
+
     public void fastProvNodeAddrGet(Node node) {
         if (mMessager != null) {
             FastProvNodeAddrGetMessage message = new FastProvNodeAddrGetMessage(node, mApp);
@@ -236,7 +254,9 @@ public enum MeshConnection {
 
     public void setLightHSL(int color, Node node, long addr) {
         if (mMessager != null) {
-            LightHSLSetMessage message = new LightHSLSetMessage(addr, node, mApp, color);
+            float[] hsl = new float[3];
+            ColorUtils.colorToHSL(color, hsl);
+            LightHSLSetMessage message = new LightHSLSetMessage(addr, node, mApp, hsl);
             mMessager.lightSetHSL(message);
         }
     }
@@ -294,14 +314,19 @@ public enum MeshConnection {
         }
 
         @Override
+        public void onNodeResetStatus(long nodeAddress, String nodeMac) {
+            mLog.e("onNodeResetStatus " + nodeAddress + " " + nodeMac);
+        }
+
+        @Override
         public void onRelayStatus(int state, int count, int step) {
             RelayEvent event = new RelayEvent(state, count, step);
             EventBus.getDefault().post(event);
         }
 
         @Override
-        public void onLightHSLStatus(int[] rgb) {
-            LightHSLEvent event = new LightHSLEvent(rgb[0], rgb[1], rgb[2]);
+        public void onLightHSLStatus(float[] hsl) {
+            LightHSLEvent event = new LightHSLEvent(hsl[0], hsl[1], hsl[2]);
             EventBus.getDefault().post(event);
         }
 
@@ -315,16 +340,6 @@ public enum MeshConnection {
         public void onFastProvNodeAddrStatus(String nodeMac, long[] addrArray) {
             FastProvAddrEvent event = new FastProvAddrEvent(nodeMac, addrArray);
             EventBus.getDefault().post(event);
-        }
-
-        @Override
-        public void onNeedOTAUpdateNotification(byte[] manufacturerId, byte[] binId, byte[] version) {
-            // TODO
-        }
-
-        @Override
-        public void onOTAStartResponse() {
-            // TODO
         }
     }
 

@@ -2,9 +2,9 @@ package com.espressif.blemesh.model.message.standard;
 
 import com.espressif.blemesh.constants.MeshConstants;
 import com.espressif.blemesh.model.Node;
-import com.espressif.blemesh.model.message.Message;
+import com.espressif.blemesh.model.message.MeshMessage;
 
-public class RelaySetMessage extends Message {
+public class RelaySetMessage extends MeshMessage {
     private boolean mEnable;
     private int mCount;
     private int mStep;
