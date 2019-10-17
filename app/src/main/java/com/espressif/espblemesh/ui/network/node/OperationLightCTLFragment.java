@@ -41,7 +41,7 @@ public class OperationLightCTLFragment extends OperationFragment {
             int lightness = Integer.parseInt(lightnessStr);
             int temperature = Integer.parseInt(temperatureStr);
             int deltaUV = Integer.parseInt(deltaUVStr);
-            mMeshConnection.setLightCTL(lightness, temperature, deltaUV, mNode, mModel.getElementAddress());
+            mMeshConnection.setLightCTL(lightness, temperature, deltaUV, mNode, mDstAddress);
         });
 
         return view;

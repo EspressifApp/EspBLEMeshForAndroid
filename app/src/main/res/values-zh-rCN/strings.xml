@@ -44,7 +44,7 @@
     <string name="network_group_item_conncet">连接</string>
     <string name="network_group_item_configuration">配置</string>
     <string name="network_group_switch_onoff">开/关</string>
-    <string name="network_group_popup_menu_delete">删除</string>
+    <string name="network_group_popup_menu_reset">重置</string>
     <string name="network_group_popup_menu_fast_prov">快速配网</string>
     <string name="network_group_popup_menu_ota">OTA</string>
     <string name="network_group_delete_all_message">不能删除当前分组</string>

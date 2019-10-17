@@ -42,6 +42,7 @@ import com.espressif.espblemesh.eventbus.blemesh.LightCTLEvent;
 import com.espressif.espblemesh.eventbus.blemesh.LightHSLEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelAppEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelSubscriptionEvent;
+import com.espressif.espblemesh.eventbus.blemesh.NodeResetEvent;
 import com.espressif.espblemesh.eventbus.blemesh.RelayEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -315,7 +316,8 @@ public enum MeshConnection {
 
         @Override
         public void onNodeResetStatus(long nodeAddress, String nodeMac) {
-            mLog.e("onNodeResetStatus " + nodeAddress + " " + nodeMac);
+            NodeResetEvent event = new NodeResetEvent(nodeAddress, nodeMac);
+            EventBus.getDefault().post(event);
         }
 
         @Override

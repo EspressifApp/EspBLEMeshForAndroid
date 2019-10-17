@@ -10,8 +10,8 @@ import com.espressif.blemesh.model.Node;
 import com.espressif.espblemesh.model.MeshConnection;
 
 public class OperationFragment extends Fragment {
-    protected Model mModel;
     protected Node mNode;
+    protected long mDstAddress;
 
     protected MeshConnection mMeshConnection;
 
@@ -22,8 +22,8 @@ public class OperationFragment extends Fragment {
         mMeshConnection = MeshConnection.Instance;
     }
 
-    public void setArgs(Model model, Node node) {
-        mModel = model;
+    public void setArgs(long dstAddress, Node node) {
+        mDstAddress = dstAddress;
         mNode = node;
     }
 }

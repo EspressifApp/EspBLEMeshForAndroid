@@ -40,8 +40,10 @@ import com.espressif.espblemesh.eventbus.GattCloseEvent;
 import com.espressif.espblemesh.eventbus.GattConnectionEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelAppEvent;
 import com.espressif.espblemesh.eventbus.blemesh.ModelSubscriptionEvent;
+import com.espressif.espblemesh.eventbus.blemesh.NodeResetEvent;
 import com.espressif.espblemesh.model.MeshConnection;
 import com.espressif.espblemesh.ui.MainService;
+import com.espressif.espblemesh.ui.network.node.OperationActivity;
 import com.espressif.espblemesh.ui.network.ota.NodeOTAActivity;
 import com.espressif.espblemesh.ui.network.ota.OTAPackage;
 
@@ -62,7 +64,7 @@ public class NetworkGroupFragment extends Fragment {
     private static final int REQUEST_NODE = NetworkActivity.REQUEST_NODE;
     private static final int REQUEST_OTA = NetworkActivity.REQUEST_OTA;
 
-    private static final int POPUP_MENU_DELETE = 0x1000;
+    private static final int POPUP_MENU_RESET = 0x1000;
     private static final int POPUP_MENU_FAST_PROV = 0x1001;
     private static final int POPUP_MENU_OTA = 0x1002;
 
@@ -79,12 +81,11 @@ public class NetworkGroupFragment extends Fragment {
     private NodeAdapter mNodeAdapter;
 
     private Switch mGroupSwitch;
+    private Button mGroupCTLBtn;
 
     private MeshUser mUser;
 
     private NetworkActivity mActivity;
-
-    private boolean mViewCreated = false;
 
     private OTAPackage mOTAPackage;
 
@@ -112,15 +113,25 @@ public class NetworkGroupFragment extends Fragment {
         updateNodeList();
         mActivity.attachInFloatingToolbar(nodesView);
 
+        View operationForm = view.findViewById(R.id.group_operation_group);
+        operationForm.setVisibility(mGroup == null ? View.GONE : View.VISIBLE);
+
         mGroupSwitch = view.findViewById(R.id.group_switch);
         mGroupSwitch.setEnabled(mMeshConnection.isConnected());
-        mGroupSwitch.setVisibility(mGroup == null ? View.GONE : View.VISIBLE);
         mGroupSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (mNodeList.isEmpty()) {
                 return;
             }
 
             mMeshConnection.genericOnOff(isChecked, null, mGroup.getAddress());
+        });
+        mGroupCTLBtn = view.findViewById(R.id.group_ctl_btn);
+        mGroupCTLBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), OperationActivity.class);
+            MeshApp.getInstance().putCacheAndSaveCacheKeyInIntent(intent,
+                    Constants.KEY_DST_ADDRESS, mGroup.getAddress(),
+                    Constants.KEY_MODEL_ID, MeshConstants.MODEL_ID_CTL);
+            startActivity(intent);
         });
 
         mRefreshLayout = view.findViewById(R.id.pager_refresh_layout);
@@ -142,8 +153,6 @@ public class NetworkGroupFragment extends Fragment {
             }
         });
 
-        mViewCreated = true;
-
         EventBus.getDefault().register(this);
 
         return view;
@@ -158,13 +167,7 @@ public class NetworkGroupFragment extends Fragment {
         mHandler.removeCallbacks(mScanOverRunnable);
         stopScanBle();
 
-        mViewCreated = false;
-
         mActivity = null;
-    }
-
-    public boolean isViewCreated() {
-        return mViewCreated;
     }
 
     @Override
@@ -201,7 +204,12 @@ public class NetworkGroupFragment extends Fragment {
         mGroup = null;
     }
 
-    void updateNodeList() {
+    private void setOperationFormEnable(boolean enable) {
+        mGroupSwitch.setEnabled(enable);
+        mGroupCTLBtn.setEnabled(enable);
+    }
+
+    private void updateNodeList() {
         mNodeList.clear();
         List<Node> vagrantNodes = new ArrayList<>();
         if (mNetwork != null) {
@@ -282,7 +290,7 @@ public class NetworkGroupFragment extends Fragment {
             itemView.setOnLongClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(mActivity, v);
                 Menu menu = popupMenu.getMenu();
-                menu.add(Menu.NONE, POPUP_MENU_DELETE, 0, R.string.network_group_popup_menu_delete);
+                menu.add(Menu.NONE, POPUP_MENU_RESET, 0, R.string.network_group_popup_menu_reset);
                 if (mMeshConnection.isConnected()) {
                     menu.add(Menu.NONE, POPUP_MENU_FAST_PROV, 1, R.string.network_group_popup_menu_fast_prov);
                 }
@@ -291,8 +299,8 @@ public class NetworkGroupFragment extends Fragment {
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
-                        case POPUP_MENU_DELETE:
-                            mActivity.deleteNode(node.getMac());
+                        case POPUP_MENU_RESET:
+                            mMeshConnection.nodeReset(mUser.getNodeForMac(node.getMac()));
                             return true;
                         case POPUP_MENU_FAST_PROV:
                             if (!node.containsAppKeyIndex(mActivity.getApp().getKeyIndex())) {
@@ -432,16 +440,16 @@ public class NetworkGroupFragment extends Fragment {
         if (status == BluetoothGatt.GATT_SUCCESS) {
             switch (newState) {
                 case BluetoothGatt.STATE_CONNECTED:
-                    mGroupSwitch.setEnabled(true);
+                    setOperationFormEnable(true);
                     updateNodeList();
                     break;
                 case BluetoothGatt.STATE_DISCONNECTED:
-                    mGroupSwitch.setEnabled(false);
+                    setOperationFormEnable(false);
                     updateNodeList();
                     break;
             }
         } else {
-            mGroupSwitch.setEnabled(false);
+            setOperationFormEnable(false);
             updateNodeList();
         }
 
@@ -452,7 +460,7 @@ public class NetworkGroupFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGattCloseEvent(GattCloseEvent event) {
-        mGroupSwitch.setEnabled(false);
+        setOperationFormEnable(false);
         updateNodeList();
 
         if (mOTAPackage != null && mOTAPackage.messageCB != null) {
@@ -474,6 +482,12 @@ public class NetworkGroupFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onModelSubscriptionEvent(ModelSubscriptionEvent event) {
         mLog.i("onModelSubscriptionEvent");
+        updateNodeList();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNodeResetEvent(NodeResetEvent event) {
+        mLog.i("onNodeResetEvent");
         updateNodeList();
     }
 

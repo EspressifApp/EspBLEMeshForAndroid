@@ -26,7 +26,6 @@ import com.espressif.blemesh.model.Group;
 import com.espressif.blemesh.model.Network;
 import com.espressif.blemesh.model.Node;
 import com.espressif.blemesh.task.GroupDeleteTask;
-import com.espressif.blemesh.task.NodeDeleteTask;
 import com.espressif.blemesh.user.MeshUser;
 import com.espressif.espblemesh.R;
 import com.espressif.espblemesh.constants.Constants;
@@ -324,16 +323,6 @@ public class NetworkActivity extends ServiceActivity {
         fragment.setGroup(group);
         mGroupList.add(group);
         mFragments.add(fragment);
-    }
-
-    void deleteNode(String nodeMac) {
-        mMeshConnection.nodeReset(mUser.getNodeForMac(nodeMac));
-        new NodeDeleteTask(nodeMac).run();
-        for (NetworkGroupFragment fragment : mFragments) {
-            if (fragment.isViewCreated()) {
-                fragment.updateNodeList();
-            }
-        }
     }
 
     void connectNode(ScanResult scanResult) {

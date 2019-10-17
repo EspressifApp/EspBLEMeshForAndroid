@@ -18,6 +18,8 @@ public class Constants {
     public static final String KEY_GROUPS = "groups";
     public static final String KEY_BIND_GROUPS = "bind_groups";
     public static final String KEY_OPERATION = "operation";
+    public static final String KEY_DST_ADDRESS = "dst_address";
+    public static final String KEY_MODEL_ID = "model_id";
 
     public static final long APP_ADDRESS_DEFAULT = MeshConstants.APP_ADDRESS_DEFAULT;
     public static final long APP_KEY_INDEX_DEFAULT = MeshConstants.APP_KEY_INDEX_DEFAULT;

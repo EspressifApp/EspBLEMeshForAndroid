@@ -182,7 +182,8 @@ public class ModelActivity extends BaseActivity {
     private void gotoOperation() {
         Intent intent = new Intent(ModelActivity.this, OperationActivity.class);
         MeshApp.getInstance().putCacheAndSaveCacheKeyInIntent(intent,
-                Constants.KEY_MODEL, mModel,
+                Constants.KEY_DST_ADDRESS, mModel.getElementAddress(),
+                Constants.KEY_MODEL_ID, mModel.getId(),
                 Constants.KEY_NODE, mNode);
         startActivity(intent);
     }

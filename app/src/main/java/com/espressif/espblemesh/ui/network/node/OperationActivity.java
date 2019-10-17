@@ -31,11 +31,12 @@ public class OperationActivity extends BaseActivity {
 
         Intent intent = getIntent();
         MeshApp app = MeshApp.getInstance();
-        Model model = (Model) app.takeCacheForIntentKey(intent, Constants.KEY_MODEL);
         Node node = (Node) app.takeCacheForIntentKey(intent, Constants.KEY_NODE);
+        Long dstAddress = (Long) app.takeCacheForIntentKey(intent, Constants.KEY_DST_ADDRESS);
+        String modelId = (String) app.takeCacheForIntentKey(intent, Constants.KEY_MODEL_ID);
 
         OperationFragment fragment;
-        switch (model.getId()) {
+        switch (modelId) {
             case MeshConstants.MODEL_ID_HSL:
                 fragment = new OperationLightHSLFragment();
                 break;
@@ -46,7 +47,7 @@ public class OperationActivity extends BaseActivity {
                 throw new IllegalArgumentException("Unsupported model");
         }
 
-        fragment.setArgs(model, node);
+        fragment.setArgs(dstAddress, node);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_form, fragment).commit();
 
         EventBus.getDefault().register(this);

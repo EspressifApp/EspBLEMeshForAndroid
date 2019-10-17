@@ -43,7 +43,7 @@ public class OperationLightHSLFragment extends OperationFragment {
         mCircleCP.setOnColorChangedListener(mColorChangedListener);
         mLinearCP.setOnColorChangedListener(mColorChangedListener);
 
-        mMeshConnection.getLightHSL(mNode, mModel.getElementAddress());
+        mMeshConnection.getLightHSL(mNode, mDstAddress);
 
         EventBus.getDefault().register(this);
 
@@ -90,7 +90,7 @@ public class OperationLightHSLFragment extends OperationFragment {
                 mLinearCP.setColors(new int[]{Color.BLACK, color, Color.WHITE});
             }
 
-            mMeshConnection.setLightHSL(color, mNode, mModel.getElementAddress());
+            mMeshConnection.setLightHSL(color, mNode, mDstAddress);
         }
     };
 
