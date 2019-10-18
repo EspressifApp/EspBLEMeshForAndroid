@@ -117,7 +117,6 @@ public class NetworkGroupFragment extends Fragment {
         operationForm.setVisibility(mGroup == null ? View.GONE : View.VISIBLE);
 
         mGroupSwitch = view.findViewById(R.id.group_switch);
-        mGroupSwitch.setEnabled(mMeshConnection.isConnected());
         mGroupSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (mNodeList.isEmpty()) {
                 return;
@@ -133,6 +132,7 @@ public class NetworkGroupFragment extends Fragment {
                     Constants.KEY_MODEL_ID, MeshConstants.MODEL_ID_CTL);
             startActivity(intent);
         });
+        setOperationFormEnable(mMeshConnection.isConnected());
 
         mRefreshLayout = view.findViewById(R.id.pager_refresh_layout);
         mRefreshLayout.setColorSchemeResources(R.color.colorAccent);
